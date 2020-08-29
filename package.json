@@ -1,0 +1,36 @@
+{
+  "name": "react_typescript_webpack",
+  "version": "1.0.0",
+  "description": "Basis webpack,react, and typescript pipeline.",
+  "scripts": {
+    "build": "webpack --config webpack.config.js",
+    "watch": "webpack --config webpack.config.js --watch",
+    "preview": "cd dist && live-server"
+  },
+  "keywords": [
+    "react",
+    "typescript",
+    "webpack"
+  ],
+  "author": "giuseppe@hoppinger.com",
+  "license": "MIT",
+  "dependencies": {
+    "@fluentui/react": "^7.133.0",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-router": "^5.2.0",
+    "react-router-dom": "^5.2.0",
+    "widgets-for-react": "^1.7.1"
+  },
+  "devDependencies": {
+    "@types/react": "^16.8.24",
+    "@types/react-dom": "^16.0.5",
+    "@types/webpack": "4.1.4",
+    "html-webpack-plugin": "^4.3.0",
+    "live-server": "^1.2.1",
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.4.3",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10"
+  }
+}
