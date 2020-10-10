@@ -16,20 +16,27 @@
   "license": "MIT",
   "dependencies": {
     "@fluentui/react": "^7.133.0",
+    "@types/react-router-dom": "^5.1.5",
+    "postcss": "^8.0.5",
+    "postcss-calc": "^7.0.4",
+    "postcss-preset-env": "^6.7.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
-    "react-router": "^5.2.0",
-    "react-router-dom": "^5.2.0",
+    "react-router": "^4.x",
+    "react-router-dom": "^4.x",
     "widgets-for-react": "^1.7.1"
   },
   "devDependencies": {
     "@types/react": "^16.8.24",
     "@types/react-dom": "^16.0.5",
     "@types/webpack": "4.1.4",
+    "css-loader": "^4.3.0",
     "html-webpack-plugin": "^4.3.0",
     "live-server": "^1.2.1",
+    "postcss-loader": "^4.0.2",
+    "style-loader": "^1.2.1",
     "ts-loader": "^6.2.1",
-    "typescript": "^3.4.3",
+    "typescript": "^4.0",
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10"
   }
