@@ -2,6 +2,7 @@ import { Action, Fun, IOWidget, Route } from "widgets-for-react"
 
 export type StandardWidget<s> = IOWidget<s, Updater<s>>
 export type Updater<s> = Action<s>
+export type HTMLWrapper = Action<JSX.Element>
 
 export const ensureHTML = function<a>(f:Action<a> | undefined) : Action<a> {
   if (f == undefined) return x => x

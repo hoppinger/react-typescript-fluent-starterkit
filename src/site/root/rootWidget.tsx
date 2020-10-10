@@ -1,48 +1,14 @@
 import { any, browserRouter, fromJSX, IOWidget, link, notFoundRouteCase, route, routerSwitch, stateful, Unit, Widget } from "widgets-for-react"
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Link, useHistory } from "react-router-dom"
-import { PrimaryButton, Stack, Label, Spinner, IStackProps, SpinnerSize, CommandBar, Pivot, PivotItem } from '@fluentui/react'
+import { Link } from "react-router-dom"
 import { StandardWidget, Updater } from "../../widgets-extras";
 import { wizard } from "../wizard/wizardWidget";
 import { Person, personUpdaters, ProductId, State, stateUpdaters } from "./rootState";
 import { wizardStateUpdaters, WizardState, initialWizardState } from "../wizard/wizardState";
-import { routeWidgets } from "./routes/routesState";
-
-export const routes = () =>
-  routerSwitch<Updater<State>>()([
-    routeWidgets.home,
-    routeWidgets.aboutUs,
-    routeWidgets.products,
-    routeWidgets.product,
-    notFoundRouteCase<Updater<State>>(stateUpdaters.routes.home.jumpTo),
-  ])
-
-export const navigation:StandardWidget<State> = state =>
-  fromJSX(_ =>
-    <CommandBar 
-      items={[
-        { 
-          key:"home",
-          text:"home",
-          checked:state.page.kind == "home",
-          onClick:() => useHistory().push("/")
-        },
-        { 
-          key:"about us",
-          text:"about us",
-          checked:state.page.kind == "aboutUs",
-          onClick:() => useHistory().push("/about-us")
-        },
-        { 
-          key:"products",
-          text:"products",
-          checked:state.page.kind == "products" || state.page.kind == "product",
-          onClick:() => useHistory().push("/products")
-        }
-      ]}
-    />
-  )
+import { routeUpdaters, routeWidgets } from "./routes/routesState";
+import { Button, Container, Nav, Navbar } from 'react-bootstrap';
+import { navigation, routes } from "./routes/routesWidget";
 
 export const personWizardWidget : StandardWidget<WizardState<Person>> = 
   currentState => 
@@ -67,7 +33,7 @@ export const page:IOWidget<State, Updater<State>> = currentState =>
     // wizard(currentState.wizard2).map(stateUpdaters.updateWizard2),
     fromJSX(setState => 
       <>
-        <PrimaryButton>Button!!!</PrimaryButton>
+        <Button>Button!!!</Button>
       </>
     )
   ])

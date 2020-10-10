@@ -1,27 +1,27 @@
-import { Action, any, browserRouter, fromJSX, IOWidget, link, notFoundRouteCase, route, routerSwitch, stateful, Unit, Widget } from "widgets-for-react"
+import { any, browserRouter, fromJSX, IOWidget, link, notFoundRouteCase, route, routerSwitch, stateful, Unit, Widget } from "widgets-for-react"
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Link } from "react-router-dom"
-import { PrimaryButton, Stack, Label, Spinner, IStackProps, SpinnerSize } from '@fluentui/react'
-import { ensureHTML, StandardWidget, Updater } from "../../widgets-extras"
+import { ensureHTML, HTMLWrapper, StandardWidget, Updater } from "../../widgets-extras"
 import { wizardStateUpdaters, WizardState } from "./wizardState";
 import { defaultWizardRenderingWrappers } from "./wizardLayout";
+import { Button, Nav, Navbar } from 'react-bootstrap';
 
 export const wizardNavigationControls = <Fields, >(currentWizardState:WizardState<Fields>) : Widget<Updater<WizardState<Fields>>> =>
   fromJSX(setState => 
     <>
-      <PrimaryButton 
+      <Button 
         disabled={currentWizardState.step <= 0} 
-        onClick={e => setState(wizardStateUpdaters<Fields>().prev)}>Prev</PrimaryButton>
-      <PrimaryButton 
+        onClick={e => setState(wizardStateUpdaters<Fields>().prev)}>Prev</Button>
+      <Button 
         disabled={currentWizardState.step >= currentWizardState.maxSteps} 
-        onClick={e => setState(wizardStateUpdaters<Fields>().next)}>Next</PrimaryButton>
+        onClick={e => setState(wizardStateUpdaters<Fields>().next)}>Next</Button>
     </>)
 
 export type WizardRenderingWrappers ={
-  fields?:Action<JSX.Element>,
-  navigationControls?:Action<JSX.Element>,
-  root?:Action<JSX.Element>
+  fields?:HTMLWrapper,
+  navigationControls?:HTMLWrapper,
+  root?:HTMLWrapper
 }
 
 export const wizard = <Fields, >(

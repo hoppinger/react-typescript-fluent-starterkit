@@ -1,28 +1,31 @@
 [ ] routeBuilders should be more specific about the page they return
-[/] type-safe routes
-[ ] undeprecate router stuff
-[ ] routes should never be repeated
-[ ] switch on routes for main content
-[ ] forms
-[ ] menus
-[ ] shouldComponentUpdate: e * w -> e + w
-[ ] fromJSX only needs one type argument
-
-[ ] use asyncs somewhere
 [ ] frontend framework
+[ ] switch on routes for main content
+  [ ] register and login flow
+  [ ] products catalogue
+  [ ] shopping cart
+  [ ] mock API to use asyncs somewhere
+[ ] contact us form
+
 [ ] use lenses (without commit!)
-[ ] Action -> Updater
 
 [ ] readme and coding guidelines
 
-[ ] fix warning " > widgets-for-react@1.7.1" has incorrect peer dependency "react-router-dom@4.x".
 [ ] think of an epic name
+[/] fully type-safe routes
+[ ] fromJSX only needs one type argument
+[ ] shouldComponentUpdate: e * w -> e + w
 [ ] remove Form and Wizard from scaffolder
 [ ] remove div etc. from scaffolder
+[ ] undeprecate router stuff
+[ ] fix warning " > widgets-for-react@1.7.1" has incorrect peer dependency "react-router-dom@4.x".
 
 [x] wizards
 [x] move state stuff to separate file(s)
 [x] routeUpdates in stateUpdaters
+[x] split navbar away from root files
+[x] routes should never be repeated
+[x] Action -> Updater
 
 [?] use in-memory db
 [?] state builder: pages, db, transients, actions

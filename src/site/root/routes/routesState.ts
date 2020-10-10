@@ -1,9 +1,5 @@
-import { Action, any, browserRouter, fromJSX, Fun, IOWidget, link, notFoundRouteCase, Route, route, routerSwitch, stateful, Unit, Widget } from "widgets-for-react"
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Link } from "react-router-dom"
-import { PrimaryButton, Stack, Label, Spinner, IStackProps, SpinnerSize } from '@fluentui/react'
-import { ProductId, State } from "../rootState";
+import { route, Unit } from "widgets-for-react"
+import { State } from "../rootState";
 import { PageParams, RouteBuilders, Routes as RouteWidgets, RouteUpdaters, Updater } from "../../../widgets-extras";
 
 export type Pages =
@@ -37,7 +33,7 @@ export const routeUpdaters:RouteUpdaters<State,Pages> = {
   home: {
     jumpTo:(params:PageParams<Pages["home"]>) : Updater<State> => s0 => 
       ({...s0, page:routeBuilders.home.make(params), somethingElse:s0.somethingElse+1 }),
-    url:""
+    url:"/"
   },
   aboutUs: {
     jumpTo: (params:PageParams<Pages["aboutUs"]>) : Updater<State> => s0 => 

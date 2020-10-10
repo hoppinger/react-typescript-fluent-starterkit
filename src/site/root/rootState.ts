@@ -1,8 +1,7 @@
-import { Action, any, browserRouter, fromJSX, IOWidget, link, notFoundRouteCase, route, routerSwitch, stateful, Unit, Widget } from "widgets-for-react"
+import { any, browserRouter, fromJSX, IOWidget, link, notFoundRouteCase, route, routerSwitch, stateful, Unit, Widget } from "widgets-for-react"
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Link } from "react-router-dom"
-import { PrimaryButton, Stack, Label, Spinner, IStackProps, SpinnerSize } from '@fluentui/react'
 import { CurrentPage, StandardWidget, Updater } from "../../widgets-extras";
 import { wizard } from "../wizard/wizardWidget";
 import { WizardState } from "../wizard/wizardState";
