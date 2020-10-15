@@ -26,5 +26,5 @@ export const wizard = <Fields, >(
     fieldsWidget(currentWizardState)
       .wrapHTML(ensureHTML((renderingWrappers || defaultWizardRenderingWrappers).fields)),
     wizardNavigationControls(currentWizardState)
-    .wrapHTML(ensureHTML((renderingWrappers || defaultWizardRenderingWrappers).navigationControls)),
+      .wrapHTML(ensureHTML((renderingWrappers || defaultWizardRenderingWrappers).navigationControls)),
   ]).wrapHTML(ensureHTML((renderingWrappers || defaultWizardRenderingWrappers).root))
