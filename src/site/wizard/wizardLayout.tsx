@@ -2,9 +2,15 @@ import { any, browserRouter, fromJSX, IOWidget, link, notFoundRouteCase, route, 
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Link } from "react-router-dom"
-import { ensureHTML, StandardWidget, Updater } from "../../widgets-extras"
+import { ensureHTML, HTMLWrapper, StandardWidget, Updater } from "../../widgets-extras"
 import { wizardStateUpdaters, WizardState } from "./wizardState";
-import { WizardRenderingWrappers } from "./wizardWidget";
+
+export type WizardRenderingWrappers ={
+  fields?:HTMLWrapper,
+  navigationControls?:HTMLWrapper,
+  root?:HTMLWrapper
+}
 
 export const defaultWizardRenderingWrappers:WizardRenderingWrappers = {
 }
+

@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import { Link } from "react-router-dom"
 import { ensureHTML, HTMLWrapper, StandardWidget, Updater } from "../../widgets-extras"
 import { wizardStateUpdaters, WizardState } from "./wizardState";
-import { defaultWizardRenderingWrappers } from "./wizardLayout";
+import { defaultWizardRenderingWrappers, WizardRenderingWrappers } from "./wizardLayout";
 import { Button, Nav, Navbar } from 'react-bootstrap';
 
 export const wizardNavigationControls = <Fields, >(currentWizardState:WizardState<Fields>) : Widget<Updater<WizardState<Fields>>> =>
@@ -17,12 +17,6 @@ export const wizardNavigationControls = <Fields, >(currentWizardState:WizardStat
         disabled={currentWizardState.step >= currentWizardState.maxSteps} 
         onClick={e => setState(wizardStateUpdaters<Fields>().next)}>Next</Button>
     </>)
-
-export type WizardRenderingWrappers ={
-  fields?:HTMLWrapper,
-  navigationControls?:HTMLWrapper,
-  root?:HTMLWrapper
-}
 
 export const wizard = <Fields, >(
   fieldsWidget:StandardWidget<WizardState<Fields>>, 
