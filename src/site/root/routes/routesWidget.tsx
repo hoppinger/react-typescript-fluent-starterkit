@@ -1,11 +1,10 @@
 import { any, browserRouter, fromJSX, IOWidget, link, notFoundRouteCase, route, routerSwitch, stateful, Unit, Widget } from "widgets-for-react"
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Link } from "react-router-dom"
-import { Button, Container, Nav, Navbar } from 'react-bootstrap';
 import { StandardWidget, Updater } from "../../../widgets-extras";
 import { State, stateUpdaters } from "../rootState";
 import { routeUpdaters, routeWidgets } from "./routesState";
+import { navigationWrappers as navigationLayout } from "./routesLayout";
 
 export const routes = () =>
   routerSwitch<Updater<State>>()([
@@ -18,11 +17,11 @@ export const routes = () =>
 
 export const navigationItem = function<routeName extends keyof (typeof routeUpdaters)>(title:string, routeName:routeName) : StandardWidget<State> { return state =>
   fromJSX(_ =>
-    <Nav.Item>
-      <Nav.Link active={state.page.kind == routeName}>
-        <Link to={routeUpdaters[routeName].url}>{title}</Link>
-      </Nav.Link>
-    </Nav.Item>
+    <navigationLayout.item 
+      isActive={state.page.kind == routeName}
+      title={title}
+      to={routeUpdaters[routeName].url}
+    />
 )}
 
 export const navigation:StandardWidget<State> = state =>
@@ -30,5 +29,4 @@ export const navigation:StandardWidget<State> = state =>
       navigationItem("Home", "home")(state),
       navigationItem("About us", "aboutUs")(state),
       navigationItem("Products", "products")(state),
-    ]).wrapHTML(html => 
-      <Nav variant="tabs" className="mr-auto">{html}</Nav>)
+    ]).wrapHTML(navigationLayout.navWrapper)
