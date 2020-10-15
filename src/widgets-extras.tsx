@@ -36,21 +36,21 @@ export type Url<page> = page extends { url:infer url } ? url : { error:"no url",
 export type PageParams<page> = UrlToParams<Url<page>>
 
 export type CurrentPage<pages> = { 
-  [page in keyof pages]:
-    Pick<pages[page], Exclude<keyof pages[page], "url">>
+  [pageKey in keyof pages]:
+    Pick<pages[pageKey], Exclude<keyof pages[pageKey], "url">>
     & { 
-        kind:page,
-        params:PageParams<pages[page]>
+        kind:pageKey,
+        params:PageParams<pages[pageKey]>
       } 
   }[keyof pages]
 
-export type RouteBuilder<state, pages, page> = 
-  Fun<PageParams<page>, CurrentPage<pages>>
+export type RouteBuilder<state, pages, pageKey extends keyof pages> = 
+  Fun<PageParams<pages[pageKey]>, CurrentPage<{ [k in pageKey]:pages[k] }>>
 
 export type RouteBuilders<state, pages> =
   {
-    [ page in keyof pages]:{
-      make:RouteBuilder<state, pages, pages[page]>,
+    [pageKey in keyof pages]:{
+      make:RouteBuilder<state, pages, pageKey>,
     }
   }
 
@@ -59,13 +59,13 @@ export type RouteUpdater<state, page> =
   
 export type RouteUpdaters<state, pages> =
   {
-    [ page in keyof pages]:{
-      jumpTo:RouteUpdater<state, pages[page]>,
+    [pageKey in keyof pages]:{
+      jumpTo:RouteUpdater<state, pages[pageKey]>,
       url:string // <- in 4.1 this will come from the page url, right now this is a typing issue
     }
   }
 
 export type Routes<state, pages> = 
 {
-  [ page in keyof pages]:Route<Updater<state>>
+  [pageKey in keyof pages]:Route<Updater<state>>
 }

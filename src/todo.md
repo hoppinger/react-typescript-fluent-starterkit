@@ -1,11 +1,12 @@
-[ ] routeBuilders should be more specific about the page they return
-[ ] frontend framework
+[ ] Nav and Nav.Item, Nav.Link in separate file
+[ ] footer
 [ ] switch on routes for main content
+  [ ] contact us form
   [ ] register and login flow
   [ ] products catalogue
   [ ] shopping cart
   [ ] mock API to use asyncs somewhere
-[ ] contact us form
+[ ] frontend framework
 
 [ ] use lenses (without commit!)
 
@@ -26,6 +27,7 @@
 [x] split navbar away from root files
 [x] routes should never be repeated
 [x] Action -> Updater
+[x] routeBuilders should be more specific about the page they return
 
 [?] use in-memory db
 [?] state builder: pages, db, transients, actions

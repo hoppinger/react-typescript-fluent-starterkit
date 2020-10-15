@@ -9,37 +9,24 @@ import { wizardStateUpdaters, WizardState, initialWizardState } from "../wizard/
 import { routeUpdaters, routeWidgets } from "./routes/routesState";
 import { Button, Container, Nav, Navbar } from 'react-bootstrap';
 import { navigation, routes } from "./routes/routesWidget";
-
-export const personWizardWidget : StandardWidget<WizardState<Person>> = 
-  currentState => 
-    fromJSX(setState =>
-      <>
-        <input value={currentState.fields.name} 
-          onChange={(e => 
-            wizardStateUpdaters<WizardState<Person>>().fields(
-              wizardStateUpdaters<Person>().fields(
-                personUpdaters.name(e.currentTarget.value))))} />
-        <input value={currentState.fields.surname} 
-          onChange={(e => 
-            wizardStateUpdaters<WizardState<Person>>().fields(
-              wizardStateUpdaters<Person>().fields(
-                personUpdaters.surname(e.currentTarget.value))))} />
-      </>
-    )
+import { contactUs } from "./contactUs/contactUsWidget";
 
 export const page:IOWidget<State, Updater<State>> = currentState =>
-  any<Updater<State>>()([
-    wizard(personWizardWidget, currentState.wizard1).map(stateUpdaters.updateWizard1),
-    // wizard(currentState.wizard2).map(stateUpdaters.updateWizard2),
-    fromJSX(setState => 
-      <>
-        <Button>Button!!!</Button>
-      </>
-    )
-  ])
+  fromJSX(_ =>
+    currentState.page.kind == "home" ?
+      <div>Home</div>
+    : currentState.page.kind == "aboutUs" ?
+      <div>About us</div>
+    : currentState.page.kind == "contactUs" ?
+      <div>Contact us</div>
+    : currentState.page.kind == "products" ?
+      <div>Products </div>
+    : currentState.page.kind == "product" ?
+      <div>Product {currentState.page.params.productId}</div>
+    : <div></div>
+  )
 
-
-export const site = 
+export const root = 
   browserRouter<State>()(
     stateful<State>()(currentState => 
       any<Updater<State>>()([

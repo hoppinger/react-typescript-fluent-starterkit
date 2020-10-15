@@ -30,5 +30,5 @@ export const navigation:StandardWidget<State> = state =>
       navigationItem("Home", "home")(state),
       navigationItem("About us", "aboutUs")(state),
       navigationItem("Products", "products")(state),
-    ]).wrapHTML(html => <Nav variant="tabs" className="mr-auto">{html}</Nav>)
-
+    ]).wrapHTML(html => 
+      <Nav variant="tabs" className="mr-auto">{html}</Nav>)
