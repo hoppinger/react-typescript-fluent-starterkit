@@ -4,8 +4,8 @@ import ReactDOM from 'react-dom';
 import { Link } from "react-router-dom"
 import { CurrentPage, StandardWidget, Updater } from "../../widgets-extras";
 import { wizard } from "../wizard/wizardWidget";
-import { WizardState } from "../wizard/wizardState";
 import { Pages, routeUpdaters } from "./routes/routesState";
+import { ContactUsState } from "./contactUs/contactUsState";
 
 export type ProductId = number
 
@@ -21,11 +21,16 @@ export const personUpdaters = {
 export type State = {
   page:CurrentPage<Pages>,
   somethingElse:number
-  wizard1:WizardState<Person>
 }
 
 export const stateUpdaters = {
-  updateWizard1:(wizardStateUpdater:Updater<WizardState<Person>>) => 
-    (currentState:State):State => ({...currentState, wizard1:wizardStateUpdater(currentState.wizard1)}),
+  updateContactUsState:(contactUsUpdater:Updater<ContactUsState>) => 
+    (currentState:State):State => 
+      ({...currentState, 
+        page:
+          currentState.page.kind == "contactUs" ?
+            {...currentState.page, pageState:contactUsUpdater(currentState.page.pageState)}
+          : currentState.page
+      }),
   routes:routeUpdaters
 }

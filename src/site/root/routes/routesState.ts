@@ -1,6 +1,7 @@
 import { route, Unit } from "widgets-for-react"
 import { State } from "../rootState";
 import { PageParams, RouteBuilders, Routes as RouteWidgets, RouteUpdaters, Updater } from "../../../widgets-extras";
+import { ContactUsState, initialContactUsState } from "../contactUs/contactUsState";
 
 export type Pages =
   {
@@ -8,7 +9,7 @@ export type Pages =
     product:{ url:["products", { productId : number }], pageState?:Unit }, // <- pageState will become async loader
     products:{ url:["products"], pageState?:Unit }, // <- pageState will become async loader
     aboutUs:{ url:["about-us"] }
-    contactUs:{ url:["contact-us"] }
+    contactUs:{ url:["contact-us"], pageState:ContactUsState }
   }
 
 export const routeBuilders:RouteBuilders<State,Pages> = {
@@ -22,7 +23,7 @@ export const routeBuilders:RouteBuilders<State,Pages> = {
       },
     contactUs: {
       make: (params:PageParams<Pages["contactUs"]>) => 
-        ({ kind:"contactUs", params:params })
+        ({ kind:"contactUs", params:params, pageState:initialContactUsState })
       },
     products: {
       make: (params:PageParams<Pages["products"]>) => 
@@ -48,7 +49,7 @@ export const routeUpdaters:RouteUpdaters<State,Pages> = {
   contactUs: {
     jumpTo: (params:PageParams<Pages["contactUs"]>) : Updater<State> => s0 => 
       ({...s0, page:routeBuilders.contactUs.make(params), somethingElse:s0.somethingElse*2 }),
-      url:"/about-us"
+      url:"/contact-us"
     },
   products: {
     jumpTo: (params:PageParams<Pages["products"]>) : Updater<State> => s0 => 

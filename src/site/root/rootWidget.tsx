@@ -1,17 +1,16 @@
 import { any, browserRouter, fromJSX, IOWidget, link, notFoundRouteCase, route, routerSwitch, stateful, Unit, Widget } from "widgets-for-react"
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { Link } from "react-router-dom"
 import { StandardWidget, Updater } from "../../widgets-extras";
-import { wizard } from "../wizard/wizardWidget";
 import { Person, personUpdaters, ProductId, State, stateUpdaters } from "./rootState";
-import { wizardStateUpdaters, WizardState, initialWizardState } from "../wizard/wizardState";
-import { routeUpdaters, routeWidgets } from "./routes/routesState";
-import { Button, Container, Nav, Navbar } from 'react-bootstrap';
 import { navigation, routes } from "./routes/routesWidget";
-import { contactUs } from "./contactUs/contactUsWidget";
+import { contactUsWidget } from "./contactUs/contactUsWidget";
+import { rootLayout } from "./rootLayout";
 
 export const page:IOWidget<State, Updater<State>> = currentState =>
+  currentState.page.kind == "contactUs" ?
+    contactUsWidget(currentState.page.pageState)
+      .map(updateContactUsState => stateUpdaters.updateContactUsState(updateContactUsState))
+  :
   fromJSX(_ =>
     currentState.page.kind == "home" ?
       <div>Home</div>
@@ -32,7 +31,7 @@ export const root =
       any<Updater<State>>()([
         routes(),
         navigation(currentState),
-        page(currentState)
+        page(currentState).wrapHTML(rootLayout.page)
       ]).map(u => u(currentState))
-    )({ page:{ kind:"home", params:{} }, somethingElse:0, wizard1:initialWizardState(3, { name:"", surname:"" }) })
+    )({ page:{ kind:"home", params:{} }, somethingElse:0 })
   )

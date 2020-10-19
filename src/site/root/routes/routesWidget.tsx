@@ -12,6 +12,7 @@ export const routes = () =>
     routeWidgets.aboutUs,
     routeWidgets.products,
     routeWidgets.product,
+    routeWidgets.contactUs,
     notFoundRouteCase<Updater<State>>(stateUpdaters.routes.home.jumpTo),
   ])
 
@@ -29,4 +30,5 @@ export const navigation:StandardWidget<State> = state =>
       navigationItem("Home", "home")(state),
       navigationItem("About us", "aboutUs")(state),
       navigationItem("Products", "products")(state),
+      navigationItem("Contact us", "contactUs")(state),
     ]).wrapHTML(navigationLayout.navWrapper)

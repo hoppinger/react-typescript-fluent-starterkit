@@ -1,33 +1,41 @@
-[ ] Nav and Nav.Item, Nav.Link in separate file
+[ ] products catalogue
+  [ ] add to cart
+[ ] shopping cart
+  [ ] checkout without login
+  [ ] "payment" flow
 [ ] footer
-[ ] switch on routes for main content
-  [ ] contact us form
-  [ ] register and login flow
-  [ ] products catalogue
-  [ ] shopping cart
-  [ ] mock API to use asyncs somewhere
-[ ] frontend framework
+[ ] apply theme
+[ ] client-side validation of form (Bootstrap)
 
-[ ] use lenses (without commit!)
+[ ] use lenses (without commit!) on all states
+  [ ] regular states
+  [ ] within maps
+  [ ] inside discriminated unions
+[ ] e * w -> e + w
 
 [ ] readme and coding guidelines
 
 [ ] think of an epic name
 [/] fully type-safe routes
+
 [ ] fromJSX only needs one type argument
-[ ] shouldComponentUpdate: e * w -> e + w
 [ ] remove Form and Wizard from scaffolder
 [ ] remove div etc. from scaffolder
 [ ] undeprecate router stuff
 [ ] fix warning " > widgets-for-react@1.7.1" has incorrect peer dependency "react-router-dom@4.x".
+[ ] fix widget library router (componentDidMount instead of componentWillMount warning)
 
-[x] wizards
+[x] contact us form
 [x] move state stuff to separate file(s)
 [x] routeUpdates in stateUpdaters
 [x] split navbar away from root files
 [x] routes should never be repeated
 [x] Action -> Updater
 [x] routeBuilders should be more specific about the page they return
+[x] Nav and Nav.Item, Nav.Link in separate file
+[x] frontend framework
+[x] switch on routes for main content
+[x] move api stuff to separate file(s)
 
 [?] use in-memory db
 [?] state builder: pages, db, transients, actions
