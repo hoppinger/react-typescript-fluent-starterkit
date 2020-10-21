@@ -18,14 +18,14 @@ export const contactUsWrappers = ({
       <Form.Label>{props.name}</Form.Label>
       <Form.Control type={props.type} as={props.as} rows={props.rows}
         value={props.value}
-        // isValid={props.validation.kind == "valid" ? true : undefined}
-        // isInvalid={props.validation.kind == "invalid" ? true : undefined}
+        isValid={props.validation.kind == "valid" ? true : undefined}
+        isInvalid={props.validation.kind == "invalid" ? true : undefined}
         onChange={(e => props.onChange(e.currentTarget.value))}/>
-      {/* { props.validation.kind == "invalid" ?
+      { props.validation.kind == "invalid" ?
           <Form.Control.Feedback type="invalid">
             {props.validation.error}
           </Form.Control.Feedback>
-        : <Form.Control.Feedback type="valid" /> } */}
+        : <Form.Control.Feedback type="valid" /> }
     </Form.Group>,
   thankYou: (props:{}) =>
     <Jumbotron fluid>

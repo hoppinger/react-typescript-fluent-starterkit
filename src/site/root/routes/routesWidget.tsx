@@ -18,7 +18,7 @@ export const routes = () =>
 
 export const navigationItem = function<routeName extends keyof (typeof routeUpdaters)>(title:string, routeName:routeName) : StandardWidget<State> { return state =>
   fromJSX(_ =>
-    <navigationLayout.item 
+    <navigationLayout.item
       isActive={state.page.kind == routeName}
       title={title}
       to={routeUpdaters[routeName].url}

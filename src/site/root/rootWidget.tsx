@@ -5,11 +5,16 @@ import { Person, personUpdaters, ProductId, State, stateUpdaters } from "./rootS
 import { navigation, routes } from "./routes/routesWidget";
 import { contactUsWidget } from "./contactUs/contactUsWidget";
 import { rootLayout } from "./rootLayout";
+import { productsWidget } from "./products/productsWidget";
 
 export const page:IOWidget<State, Updater<State>> = currentState =>
   currentState.page.kind == "contactUs" ?
     contactUsWidget(currentState.page.pageState)
-      .map(updateContactUsState => stateUpdaters.updateContactUsState(updateContactUsState))
+      .map(stateUpdaters.updateContactUsState)
+  :
+  currentState.page.kind == "products" ?
+    productsWidget(currentState.page.pageState)
+      .map(stateUpdaters.updateProductsState)
   :
   fromJSX(_ =>
     currentState.page.kind == "home" ?

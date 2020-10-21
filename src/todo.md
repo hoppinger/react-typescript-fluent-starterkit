@@ -1,11 +1,15 @@
-[ ] products catalogue
-  [ ] add to cart
 [ ] shopping cart
-  [ ] checkout without login
+  [ ] shouldComponentUpdate
+  [ ] add to cart
+  [ ] remove from cart
+  [ ] also in product widget
   [ ] "payment" flow
+[ ] home with special offers
+[ ] login/registration from public site
 [ ] footer
-[ ] apply theme
-[ ] client-side validation of form (Bootstrap)
+[ ] "wrappers" -> "layout"
+[ ] remote and deferred validation of contact-us form
+[ ] restore home url to "/"
 
 [ ] use lenses (without commit!) on all states
   [ ] regular states
@@ -24,7 +28,18 @@
 [ ] undeprecate router stuff
 [ ] fix warning " > widgets-for-react@1.7.1" has incorrect peer dependency "react-router-dom@4.x".
 [ ] fix widget library router (componentDidMount instead of componentWillMount warning)
+[ ] add .withOptions instead of currying to inject options into the various widget combinators
 
+[ ] scaffold with new scaffolder and new admin interface and replace placeholder API
+[ ] options, option groups, and product categories
+[ ] multi-tenancy, roles and rights
+[ ] payment provider
+[ ] billing
+[ ] server-side strip dangerous tags from product descriptions (they are set as HTML)
+[ ] discounts
+
+[x] apply theme
+[x] client-side validation of form
 [x] contact us form
 [x] move state stuff to separate file(s)
 [x] routeUpdates in stateUpdaters

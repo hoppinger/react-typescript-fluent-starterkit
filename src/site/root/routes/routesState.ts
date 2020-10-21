@@ -2,12 +2,13 @@ import { route, Unit } from "widgets-for-react"
 import { State } from "../rootState";
 import { PageParams, RouteBuilders, Routes as RouteWidgets, RouteUpdaters, Updater } from "../../../widgets-extras";
 import { ContactUsState, initialContactUsState } from "../contactUs/contactUsState";
+import { initialProductsState, ProductsState } from "../products/productsState";
 
 export type Pages =
   {
     home:{ url:[] },
     product:{ url:["products", { productId : number }], pageState?:Unit }, // <- pageState will become async loader
-    products:{ url:["products"], pageState?:Unit }, // <- pageState will become async loader
+    products:{ url:["products"], pageState:ProductsState }, // <- pageState will become async loader
     aboutUs:{ url:["about-us"] }
     contactUs:{ url:["contact-us"], pageState:ContactUsState }
   }
@@ -27,7 +28,7 @@ export const routeBuilders:RouteBuilders<State,Pages> = {
       },
     products: {
       make: (params:PageParams<Pages["products"]>) => 
-        ({ kind:"products", params:params })
+        ({ kind:"products", params:params, pageState:initialProductsState })
       },
     product: {
       make: (params:PageParams<Pages["product"]>) => 
@@ -39,7 +40,7 @@ export const routeUpdaters:RouteUpdaters<State,Pages> = {
   home: {
     jumpTo:(params:PageParams<Pages["home"]>) : Updater<State> => s0 => 
       ({...s0, page:routeBuilders.home.make(params), somethingElse:s0.somethingElse+1 }),
-    url:"/"
+    url:"/HOMEDISABLED"
   },
   aboutUs: {
     jumpTo: (params:PageParams<Pages["aboutUs"]>) : Updater<State> => s0 => 
@@ -54,7 +55,7 @@ export const routeUpdaters:RouteUpdaters<State,Pages> = {
   products: {
     jumpTo: (params:PageParams<Pages["products"]>) : Updater<State> => s0 => 
       ({...s0, page:routeBuilders.products.make(params) }),
-      url:"/products"
+      url:"/"
     },
   product: {
     jumpTo: (params:PageParams<Pages["product"]>) : Updater<State> => s0 => 

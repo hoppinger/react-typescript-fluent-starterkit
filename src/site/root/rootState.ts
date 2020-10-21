@@ -6,6 +6,7 @@ import { CurrentPage, StandardWidget, Updater } from "../../widgets-extras";
 import { wizard } from "../wizard/wizardWidget";
 import { Pages, routeUpdaters } from "./routes/routesState";
 import { ContactUsState } from "./contactUs/contactUsState";
+import { ProductsState } from "./products/productsState";
 
 export type ProductId = number
 
@@ -32,5 +33,13 @@ export const stateUpdaters = {
             {...currentState.page, pageState:contactUsUpdater(currentState.page.pageState)}
           : currentState.page
       }),
+  updateProductsState:(productsUpdater:Updater<ProductsState>) => 
+  (currentState:State):State => 
+    ({...currentState, 
+      page:
+        currentState.page.kind == "products" ?
+          {...currentState.page, pageState:productsUpdater(currentState.page.pageState)}
+        : currentState.page
+    }),     
   routes:routeUpdaters
 }

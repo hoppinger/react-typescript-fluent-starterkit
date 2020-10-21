@@ -1,9 +1,10 @@
 import { any, async, fromJSX, Unit } from "widgets-for-react"
 import React from 'react';
 import { StandardWidget, Updater } from "../../../widgets-extras";
-import { ContactUsState, contactUsUpdaters, contactUsValidators } from "./contactUsState";
+import { contactUsIsValid, ContactUsState, contactUsUpdaters, contactUsValidations } from "./contactUsState";
 import { Form, Button, InputGroup } from "react-bootstrap";
 import { contactUsWrappers } from "./contactUsLayout";
+import { validations } from "../../../shared";
 
 export const contactUsWidget : StandardWidget<ContactUsState> = currentState => 
   currentState.submission == undefined || currentState.submission.kind != "loaded" ?
@@ -12,43 +13,43 @@ export const contactUsWidget : StandardWidget<ContactUsState> = currentState =>
           <contactUsWrappers.formItemInGroup 
             controlId="formName" name="name"
             type="text"
-            value={currentState.name || ""}
+            value={currentState.input.name || ""}
             onChange={(newValue => setState(contactUsUpdaters.name(newValue)))}
-            validation={contactUsValidators.name(currentState)}
+            validation={currentState.validations.name || validations.tooEarlyToTell}
           >
           </contactUsWrappers.formItemInGroup>
           <contactUsWrappers.formItemInGroup 
             key={`contactUsPhoneNumber`}
             controlId="formPhoneNumber" name="Phone number"
             type="text"
-            value={currentState.phoneNumber || ""}
+            value={currentState.input.phoneNumber || ""}
             onChange={(newValue => setState(contactUsUpdaters.phoneNumber(newValue)))}
-            validation={contactUsValidators.phoneNumber(currentState)}
+            validation={currentState.validations.phoneNumber || validations.tooEarlyToTell}
             >
           </contactUsWrappers.formItemInGroup>
           <contactUsWrappers.formItemInGroup 
             key={"contactUsEmail"}
             controlId="formBasicEmail" name="Email address"
             type="email"
-            value={currentState.email || ""}
+            value={currentState.input.email || ""}
             onChange={(newValue => setState(contactUsUpdaters.email(newValue)))}
-            validation={contactUsValidators.email(currentState)}
+            validation={currentState.validations.email || validations.tooEarlyToTell}
           >
           </contactUsWrappers.formItemInGroup>
           <contactUsWrappers.formItemInGroup 
             controlId="formSubject" name="Subject"
             type="text" 
-            value={currentState.subject || ""}
+            value={currentState.input.subject || ""}
             onChange={(newValue => setState(contactUsUpdaters.subject(newValue)))}
-            validation={contactUsValidators.subject(currentState)}
+            validation={currentState.validations.subject || validations.tooEarlyToTell}
           >
           </contactUsWrappers.formItemInGroup>
           <contactUsWrappers.formItemInGroup controlId="formBody" name="Body"
             type="text" 
             as="textarea" rows={5}
-            value={currentState.body || ""}
+            value={currentState.input.body || ""}
             onChange={(newValue => setState(contactUsUpdaters.body(newValue)))}
-            validation={contactUsValidators.body(currentState)}
+            validation={currentState.validations.body || validations.tooEarlyToTell}
           >
             <Form.Text className="text-muted">
               Let us know what you think
@@ -65,7 +66,7 @@ export const contactUsWidget : StandardWidget<ContactUsState> = currentState =>
 export const submissionButton : StandardWidget<ContactUsState> = currentState => 
   currentState.submission == undefined ?
     fromJSX(setState =>
-      <Button variant="primary" type="submit">
+      <Button variant="primary" type="submit" disabled={contactUsIsValid(currentState) == false}>
         Submit
       </Button>
     )
