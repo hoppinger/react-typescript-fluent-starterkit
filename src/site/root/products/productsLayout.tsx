@@ -17,8 +17,20 @@ export const productsLayout = ({
       {html}
       <productsLayout.loading />
     </>,
-  cardColumns:(html:JSX.Element) =>
-    <CardColumns>
+  cardDeck:(html:JSX.Element) =>
+    <CardDeck className="mt-3">
       {html}
-    </CardColumns>
+    </CardDeck>,
+  productsCol:(html:JSX.Element) =>
+  <Col lg="8">
+    {html}
+    </Col>,
+  shoppingCartCol:(html:JSX.Element) =>
+    <Col lg="4">
+      {html}
+    </Col>,
+  row:(html:JSX.Element) =>
+    <Row>
+      {html}
+    </Row>,
 })

@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, Button, Container, Row, Col, Spinner, Jumbotron, InputGroup } from "react-bootstrap";
 import { ValidationResult } from '../../../shared';
 
-export const contactUsWrappers = ({
+export const contactUsLayout = ({
   formItemInGroup: (props:{ 
     name:string, 
     controlId:string, 

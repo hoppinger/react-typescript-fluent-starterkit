@@ -23,6 +23,9 @@ export type LoadingProductsState = {
 export type ShoppingProductsState = {
     kind:"shopping",
     renderUpTo:number,
+    currentPage:number,
+    productsPerPage:number,
+    lastPage:() => number,
     products:OrderedMap<ProductId, ProductInfo>
   }
 
@@ -34,17 +37,30 @@ export const initialProductsState:ProductsState = ({
 })
 
 export const productsUpdaters = {
+  currentPage:(newValue:Updater<number>):Updater<ProductsState> => 
+    products => 
+      products.kind == "shopping" ? 
+        ({...products, 
+          currentPage:Math.max(Math.min(newValue(products.currentPage), products.lastPage()), 0),
+          renderUpTo:products.productsPerPage })
+      : products,
   renderUpTo:(newValue:Updater<number>):Updater<ProductsState> => 
     products => 
       products.kind == "shopping" ? 
-        ({...products, renderUpTo:newValue(products.renderUpTo)})
+        ({...products, renderUpTo:Math.min(newValue(products.renderUpTo), products.productsPerPage)})
       : products,
   productsLoader:(update:Updater<AsyncState<Array<ProductInfo>>>):Updater<ProductsState> => 
     products => {
       if (products.kind != "loading") return products
       const newLoader = update(products.productsLoader)
       if (newLoader.kind == "loaded") return { 
-        kind:"shopping", renderUpTo:20, products:OrderedMap(newLoader.value.map(pi => [pi.productId, pi])) }
+        kind:"shopping", 
+        currentPage:0, 
+        productsPerPage:17, 
+        renderUpTo:17, 
+        products:OrderedMap(newLoader.value.map(pi => [pi.productId, pi])),
+        lastPage:function(this:ShoppingProductsState) { return Math.floor(this.products.count() / this.productsPerPage) }
+      }
       return {...products, productsLoader:newLoader }
     },
 }

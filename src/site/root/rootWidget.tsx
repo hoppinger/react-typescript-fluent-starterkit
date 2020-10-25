@@ -1,7 +1,7 @@
-import { any, browserRouter, fromJSX, IOWidget, link, notFoundRouteCase, route, routerSwitch, stateful, Unit, Widget } from "widgets-for-react"
+import { inl, any, browserRouter, fromJSX, IOWidget, link, notFoundRouteCase, route, routerSwitch, stateful, Unit, Widget } from "widgets-for-react"
 import React from 'react';
-import { StandardWidget, Updater } from "../../widgets-extras";
-import { Person, personUpdaters, ProductId, State, stateUpdaters } from "./rootState";
+import { applyDoubleUpdater, StandardLocalWidget, Updater } from "../../widgets-extras";
+import { initialState, Person, personUpdaters, ProductId, State, stateUpdaters } from "./rootState";
 import { navigation, routes } from "./routes/routesWidget";
 import { contactUsWidget } from "./contactUs/contactUsWidget";
 import { rootLayout } from "./rootLayout";
@@ -13,8 +13,12 @@ export const page:IOWidget<State, Updater<State>> = currentState =>
       .map(stateUpdaters.updateContactUsState)
   :
   currentState.page.kind == "products" ?
-    productsWidget(currentState.page.pageState)
-      .map(stateUpdaters.updateProductsState)
+    productsWidget(currentState.lastUpdate)([currentState.shoppingCart, currentState.page.pageState])
+      .map(updater => 
+          applyDoubleUpdater(
+            updater, 
+            stateUpdaters.updateShoppingCartState, 
+            stateUpdaters.updateProductsState))
   :
   fromJSX(_ =>
     currentState.page.kind == "home" ?
@@ -25,8 +29,8 @@ export const page:IOWidget<State, Updater<State>> = currentState =>
       <div>Contact us</div>
     : currentState.page.kind == "products" ?
       <div>Products </div>
-    : currentState.page.kind == "product" ?
-      <div>Product {currentState.page.params.productId}</div>
+    // : currentState.page.kind == "product" ?
+    //   <div>Product {currentState.page.params.productId}</div>
     : <div></div>
   )
 
@@ -38,5 +42,5 @@ export const root =
         navigation(currentState),
         page(currentState).wrapHTML(rootLayout.page)
       ]).map(u => u(currentState))
-    )({ page:{ kind:"home", params:{} }, somethingElse:0 })
+    )(initialState)
   )
