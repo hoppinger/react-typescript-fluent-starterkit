@@ -1,5 +1,6 @@
 import React from 'react';
-import { Form, Button, Container, Row, Col, Spinner, Jumbotron, InputGroup, CardDeck, CardColumns } from "react-bootstrap";
+import { Range } from "immutable"
+import { Pagination, Form, Button, Container, Row, Col, Spinner, Jumbotron, InputGroup, CardDeck, CardColumns } from "react-bootstrap";
 import { ValidationResult } from '../../../shared';
 
 export const productsLayout = ({
@@ -33,4 +34,39 @@ export const productsLayout = ({
     <Row>
       {html}
     </Row>,
+  paginator:(props:{ 
+      jumpToFirst:() => void, 
+      jumpToPrev:() => void, 
+      jumpToNext:() => void, 
+      jumpToLast:() => void, 
+      jumpTo:(_:number) => void, 
+      currentPage:number,
+      lastPage:number
+
+    }) =>
+    <Pagination>
+      <Pagination.First onClick={_ => props.jumpToFirst()} />
+      <Pagination.Prev onClick={_ => props.jumpToPrev()} />
+
+      { 
+        props.currentPage >= 3 &&
+          <Pagination.Ellipsis />                
+      }
+      {
+        Range(Math.max(0, props.currentPage - 3), Math.min(props.currentPage + 3, props.lastPage + 1)).map(pageIndex => 
+          <Pagination.Item 
+            active={pageIndex == props.currentPage}
+            onClick={_ => props.jumpTo(pageIndex)}>
+            {pageIndex + 1}
+          </Pagination.Item>
+        )
+      }
+      { 
+        props.lastPage - props.currentPage >= 3 &&
+          <Pagination.Ellipsis />                
+      }
+
+      <Pagination.Next onClick={_ => props.jumpToNext()} />
+      <Pagination.Last onClick={_ => props.jumpToLast()} />
+    </Pagination>  
 })

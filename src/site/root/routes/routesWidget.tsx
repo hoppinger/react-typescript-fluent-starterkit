@@ -5,6 +5,9 @@ import { StandardLocalWidget, Updater } from "../../../widgets-extras";
 import { State, stateUpdaters } from "../rootState";
 import { routeUpdaters, routeWidgets } from "./routesState";
 import { navigationLayout as navigationLayout } from "./routesLayout";
+import { Nav, Navbar } from "react-bootstrap";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faShoppingCart } from '@fortawesome/free-solid-svg-icons'
 
 export const routes = () =>
   routerSwitch<Updater<State>>()([
@@ -16,9 +19,9 @@ export const routes = () =>
     notFoundRouteCase<Updater<State>>(stateUpdaters.routes.home.jumpTo),
   ])
 
-export const navigationItem = function<routeName extends keyof (typeof routeUpdaters)>(title:string, routeName:routeName) : StandardLocalWidget<State> { return state =>
+export const navigationItemLink = function<routeName extends keyof (typeof routeUpdaters)>(title:string, routeName:routeName) : StandardLocalWidget<State> { return state =>
   fromJSX(_ =>
-    <navigationLayout.item
+    <navigationLayout.itemLink
       isActive={state.page.kind == routeName}
       title={title}
       to={routeUpdaters[routeName].url}
@@ -27,8 +30,33 @@ export const navigationItem = function<routeName extends keyof (typeof routeUpda
 
 export const navigation:StandardLocalWidget<State> = (state:State) =>
     any<Updater<State>>()([
-      navigationItem("Home", "home")(state),
-      navigationItem("About us", "aboutUs")(state),
-      navigationItem("Products", "products")(state),
-      navigationItem("Contact us", "contactUs")(state),
+      navigationItemLink("Home", "home")(state),
+      navigationItemLink("About us", "aboutUs")(state),
+      navigationItemLink("Products", "products")(state),
+      navigationItemLink("Contact us", "contactUs")(state),
+      fromJSX(_ => 
+        <>
+          <FontAwesomeIcon icon={faShoppingCart} style={ { position:"absolute", top:"20px", right:"20px" }} />
+          <div></div>
+        </>
+      )
     ]).wrapHTML(navigationLayout.nav)
+
+export const footer:StandardLocalWidget<State> = (state:State) =>
+  fromJSX(setState => 
+    <>
+      <footer>
+        <Navbar bg="dark" variant="dark" sticky="bottom" style={{ height:"200px" }}>
+          <Nav>
+            <Navbar.Brand >Navbar with text</Navbar.Brand>
+            <Navbar.Toggle />
+            <Navbar.Collapse className="justify-content-end">
+              <Navbar.Text>
+                Signed in as: <a href="#login">Mark Otto</a>
+              </Navbar.Text>
+            </Navbar.Collapse>
+          </Nav>
+        </Navbar>    
+      </footer>
+    </>
+  )

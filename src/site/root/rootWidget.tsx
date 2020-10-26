@@ -2,7 +2,7 @@ import { inl, any, browserRouter, fromJSX, IOWidget, link, notFoundRouteCase, ro
 import React from 'react';
 import { applyDoubleUpdater, StandardLocalWidget, Updater } from "../../widgets-extras";
 import { initialState, Person, personUpdaters, ProductId, State, stateUpdaters } from "./rootState";
-import { navigation, routes } from "./routes/routesWidget";
+import { footer, navigation, routes } from "./routes/routesWidget";
 import { contactUsWidget } from "./contactUs/contactUsWidget";
 import { rootLayout } from "./rootLayout";
 import { productsWidget } from "./products/productsWidget";
@@ -40,7 +40,8 @@ export const root =
       any<Updater<State>>()([
         routes(),
         navigation(currentState),
-        page(currentState).wrapHTML(rootLayout.page)
+        page(currentState).wrapHTML(rootLayout.page),
+        footer(currentState)
       ]).map(u => u(currentState))
     )(initialState)
   )

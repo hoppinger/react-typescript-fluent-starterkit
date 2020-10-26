@@ -7,10 +7,10 @@ import { initialProductsState, ProductsState } from "../products/productsState";
 export type Pages =
   {
     home:{ url:[] },
-    products:{ url:["products"], pageState:ProductsState }, // <- pageState will become async loader
+    products:{ url:["products"], pageState:ProductsState },
     aboutUs:{ url:["about-us"] }
     contactUs:{ url:["contact-us"], pageState:ContactUsState }
-    // product:{ url:["products", { productId : number }], pageState?:Unit }, // <- pageState will become async loader
+    // product:{ url:["category", { categoryId : number }, "product", { productId : number }], pageState?:Unit }, // <- pageState will become async loader
   }
 
 export const routeBuilders:RouteBuilders<State,Pages> = {
