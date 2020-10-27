@@ -1,6 +1,7 @@
 # Doing
 [ ] readme and coding guidelines
-
+  [ ] flatMap
+  [ ] Array -> Map/OrderedMap
 [ ] logo in header
 [ ] footer
   [ ] inside <footer> tag, navbar with sticky-bottom class

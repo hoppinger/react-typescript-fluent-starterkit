@@ -12,7 +12,7 @@ import { State } from "../rootState";
 import { shoppingCartLayout } from "../shoppingCart/shoppingCartLayout";
 
 export const loadingProductsWidget : IOWidget<LoadingProductsState, Updater<ProductsState>> = currentState =>
-  async<Array<ProductInfo>>()(currentState.productsLoader).map(productsUpdaters.productsLoader)
+  async<OrderedMap<ProductId, ProductInfo>>()(currentState.productsLoader).map(productsUpdaters.productsLoader)
 
 export const productsWidget = (lastUpdate:State["lastUpdate"]) : StandardLocalGlobalWidget<ShoppingCartState, ProductsState> => ([shoppingCart,currentState]) => 
   currentState.kind == "loading" ?

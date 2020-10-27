@@ -1,5 +1,6 @@
+import { OrderedMap } from "immutable";
 import { AsyncState, HttpResult, loadingAsyncState, Unit } from "widgets-for-react";
-import { ProductInfo, ProductsState } from "./productsState";
+import { ProductId, ProductInfo, ProductsState } from "./productsState";
 
 export const mockProducts:Array<ProductInfo> = [
   {
@@ -84,22 +85,33 @@ export const mockProducts:Array<ProductInfo> = [
   },
 ]
 
-export const loadProducts = () : AsyncState<Array<ProductInfo>> =>
+const getRawProducts = () : Promise<Array<ProductInfo>> =>
+  new Promise((res,rej) => setTimeout(() => res(
+    [
+      ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, 
+      ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, 
+      ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, 
+      ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, 
+      ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, 
+      ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, 
+      ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, 
+      ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, 
+      ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, 
+      ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, 
+      ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, 
+      ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, 
+      ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, 
+    ].map((p,i) => ({...p, productId:i })))))
+
+
+const formatProducts = (products:Array<ProductInfo>) : OrderedMap<ProductId, ProductInfo> =>
+  OrderedMap(products.map(pi => [pi.productId, pi]))
+
+
+export const loadProducts = () : AsyncState<OrderedMap<ProductId, ProductInfo>> =>
   loadingAsyncState(() => 
-    new Promise((res,rej) => setTimeout(() => res({ kind:"result", 
-      value:[
-        ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, 
-        ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, 
-        ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, 
-        ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, 
-        ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, 
-        ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, 
-        ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, 
-        ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, 
-        ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, 
-        ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, 
-        ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, 
-        ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, 
-        ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, 
-      ].map((p,i) => ({...p, productId:i })), 
-    status:200 }), 250)))
+    new Promise((res,rej) => setTimeout(() => {
+      getRawProducts().then(products => 
+        res({ kind:"result", value:formatProducts(products), status:200 })
+      )
+    }, 250)))

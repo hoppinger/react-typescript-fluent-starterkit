@@ -7,7 +7,7 @@ This project contains a simple webpack/TypeScript/React pipeline that is used as
 
 Our final goal is to write code in a way that is standardized across projects, reliable, and that promotes the reuse of code between project with as little dependencies as possible.
 
-[I'm a relative reference to a repository file](../blob/master/src/guidelines.md)
+The [guidelines are available here](../blob/master/src/guidelines.md).
 
 
 

@@ -17,7 +17,7 @@ export type ProductInfo = {
 
 export type LoadingProductsState = {
     kind:"loading",
-    productsLoader:AsyncState<Array<ProductInfo>>
+    productsLoader:AsyncState<OrderedMap<ProductId, ProductInfo>>
   }
 
 export type ShoppingProductsState = {
@@ -49,7 +49,7 @@ export const productsUpdaters = {
       products.kind == "shopping" ? 
         ({...products, renderUpTo:Math.min(newValue(products.renderUpTo), products.productsPerPage)})
       : products,
-  productsLoader:(update:Updater<AsyncState<Array<ProductInfo>>>):Updater<ProductsState> => 
+  productsLoader:(update:Updater<AsyncState<OrderedMap<ProductId, ProductInfo>>>):Updater<ProductsState> => 
     products => {
       if (products.kind != "loading") return products
       const newLoader = update(products.productsLoader)
@@ -58,7 +58,7 @@ export const productsUpdaters = {
         currentPage:0, 
         productsPerPage:17, 
         renderUpTo:17, 
-        products:OrderedMap(newLoader.value.map(pi => [pi.productId, pi])),
+        products:newLoader.value,
         lastPage:function(this:ShoppingProductsState) { return Math.floor(this.products.count() / this.productsPerPage) }
       }
       return {...products, productsLoader:newLoader }
