@@ -612,7 +612,41 @@ We can then wrap the widget that renders the products inside a `shouldComponentU
 ```
 
 ### Streaming rendering
-Sometimes we might be tempted
+Sometimes we might be temptedto render a large list in one go. If there are hundreds of products, contacts, or whatever else in a list though, adding all of those elements to the DOM in one go might take upwards of **seconds**, which can be awful for the performance perception.
+
+> Ask Francesco how him and me spent _days_ optimizing an API call, to finally accept that the API was fast but rendering hundreds of products to the DOM took a full five seconds extra!
+
+A simple trick to achieve this is to perform _streaming rendering_. We store in the state not only all the things we want to render, but also how many to render _right now_\:
+
+```ts
+export type ShoppingProductsState = {
+  renderUpTo:number,
+  products:OrderedMap<ProductId, ProductInfo>
+  ...
+}
+```
+
+When rendering the products (somewhere inside an `any`), we limit ourselves to `renderUpTo` with `take`\:
+
+```ts
+currentState.products
+  .take(currentState.renderUpTo)
+  .valueSeq()
+  .map(p => 
+    productWidget(currentState)(p)
+  ).toArray()
+```
+
+We make sure that the initial value of `renderUpTo` is large enough that the user gets a screenful of products, but small enough that React can render it very quickly. Think 20-50 items, but of course experimentation is key to find the ideal answer here.
+
+We finally add another widget that uses `wait` to increment `renderUpTo`, for example by 5, every 5 milliseconds. The user will barely notice that the scrollbar grows quickly, and React will only find 5 new items to add to the list at each iteration\:
+
+```ts
+onlyIf<DoubleUpdater<ShoppingCartState, ProductsState>>(
+  currentState.renderUpTo < currentState.products.count(), 
+  wait<Updater<number>>(5)(() => x => x + 5).map(productsUpdaters.renderUpTo)
+)
+```
 
 
 ## General hygiene conventions
