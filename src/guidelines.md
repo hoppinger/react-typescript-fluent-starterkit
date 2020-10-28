@@ -164,7 +164,7 @@ The data contained in each sub\-state more closely reflects what can be done in 
 
 `products` and `categories` are stored inside an `OrderedMap`. This way, we can fetch products and categories by their id, instead of searching inside the arrays (which is slower and requires more complex code).
 
-For an example of this, look at [the products state](../blob/master/src/site/root/products/productsState.ts), and how we split the state into the `loading` and `shopping` sub\-states, with more fields that get "unlocked" when entering in the `shopping` sub\-state.
+For an example of this, look at [the products state](./site/root/products/productsState.ts), and how we split the state into the `loading` and `shopping` sub\-states, with more fields that get "unlocked" when entering in the `shopping` sub\-state.
 
 
 #### Initializer
@@ -497,19 +497,27 @@ productsWidget(currentState.lastUpdate)([currentState.shoppingCart, currentState
         stateUpdaters.updateProductsState))
 ```
 
-`applyDoubleUpdater` will simply route the updater to the proper lifting/embedding function.
+`applyDoubleUpdater` will simply route the updater to the proper lifting/embedding function. Take a look at [the products widget](./site/root/products/productsWidget.ts) to see a widget with dual output (one for its own `ProductsState`, one for the external `ShoppingCartState`).
 
 
 ## Routing and pages
+each page carries its parameters
+each page carries its state
+
 type safety
+
+
+
+## Performance consideration
 `shouldComponentUpdate` and `lastUpdate`
+keys
 
 
+
+## General hygiene conventions
 naming conventions
 
 other DOM-manipulation libraries
-in general, other npm packages
+in general, no other npm packages
 
 formatting guidelines
-
-fix links
