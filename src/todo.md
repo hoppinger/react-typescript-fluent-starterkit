@@ -1,6 +1,5 @@
 # Doing
-[ ] 404
-[ ] readme and coding guidelines
+[ ] 404 route
 [ ] logo in header
 [ ] footer
   [ ] inside <footer> tag, navbar with sticky-bottom class
@@ -68,4 +67,5 @@
 [x] frontend framework
 [x] switch on routes for main content
 [x] move api stuff to separate file(s)
+[x] readme and coding guidelines
 

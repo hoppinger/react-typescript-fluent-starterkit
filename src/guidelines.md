@@ -650,9 +650,22 @@ onlyIf<DoubleUpdater<ShoppingCartState, ProductsState>>(
 
 
 ## General hygiene conventions
-naming conventions
+We use `camelCase` for values and functions.
 
-other DOM-manipulation libraries
-in general, no other npm packages
+We use `PascalCase` for types.
 
-formatting guidelines
+We use `camelCase` for generic type parameters.
+
+We use long and expressive names for everything. Expressive names contain for example both target and action (`productsUpdaters` is the object with all the updaters for the products widget(s)).
+
+We prefer very short functions and one\-liners. Lambdas functions are preferred over long functions.
+
+We compile with the strictes TypeScript options possible.
+
+We split out TypeScript projects in sub\-projects to speed compilation times up.
+
+We use very few npm packages. The usual suspects, `React`, `react router dom`, `immutable`, etc. are obviously accepted\: it would make no sense to rebuilt React ourselves. We actively reject tiny npm packages that only perform minor functionality. We only use packages from reputable parties such as large enterprises with a solid track record. We do not use packages built from tiny companies, where code is barely updated and maintained, or where the bus factor is lower than 50.
+
+We absolutely do not use other DOM\-manipulation libraries that might conflict with React!
+
+We use formatting guidelines as defined by each project team **in full consensus**. Hoppinger\-broad formatting guidelines will later appear, but this process will take a bit longer.
