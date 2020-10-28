@@ -1,6 +1,6 @@
 import { route, Unit } from "widgets-for-react"
 import { State } from "../rootState";
-import { PageParams, RouteBuilders, Routes as RouteWidgets, RouteUpdaters, Updater } from "../../../widgets-extras";
+import { PageParams, RouteBuilders, RouteUpdaters, Updater } from "../../../widgets-extras";
 import { ContactUsState, initialContactUsState } from "../contactUs/contactUsState";
 import { initialProductsState, ProductsState } from "../products/productsState";
 
@@ -10,31 +10,31 @@ export type Pages =
     products:{ url:["products"], pageState:ProductsState },
     aboutUs:{ url:["about-us"] }
     contactUs:{ url:["contact-us"], pageState:ContactUsState }
-    // product:{ url:["category", { categoryId : number }, "product", { productId : number }], pageState?:Unit }, // <- pageState will become async loader
+    // product:{ url:["product", { productId : number }], pageState?:Unit }, // <- pageState will become async loader
   }
 
 export const routeBuilders:RouteBuilders<State,Pages> = {
-    home: {
-      make:(params:PageParams<Pages["home"]>) => 
-        ({ kind:"home", params:params })
+  home: {
+    make:(params:PageParams<Pages["home"]>) => 
+      ({ kind:"home", params:params })
+  },
+  aboutUs: {
+    make: (params:PageParams<Pages["aboutUs"]>) => 
+      ({ kind:"aboutUs", params:params })
     },
-    aboutUs: {
-      make: (params:PageParams<Pages["aboutUs"]>) => 
-        ({ kind:"aboutUs", params:params })
-      },
-    contactUs: {
-      make: (params:PageParams<Pages["contactUs"]>) => 
-        ({ kind:"contactUs", params:params, pageState:initialContactUsState })
-      },
-    products: {
-      make: (params:PageParams<Pages["products"]>) => 
-        ({ kind:"products", params:params, pageState:initialProductsState })
-      },
-    // product: {
-    //   make: (params:PageParams<Pages["product"]>) => 
-    //     ({ kind:"product", params:params })
-    //   }
-  }
+  contactUs: {
+    make: (params:PageParams<Pages["contactUs"]>) => 
+      ({ kind:"contactUs", params:params, pageState:initialContactUsState })
+    },
+  products: {
+    make: (params:PageParams<Pages["products"]>) => 
+      ({ kind:"products", params:params, pageState:initialProductsState })
+    },
+  // product: {
+  //   make: (params:PageParams<Pages["product"]>) => 
+  //     ({ kind:"product", params:params })
+  //   }
+}
   
 export const routeUpdaters:RouteUpdaters<State,Pages> = {
   home: {
@@ -63,12 +63,3 @@ export const routeUpdaters:RouteUpdaters<State,Pages> = {
   //     url:"/product/:productId([0-9])"
   //   }
 }
-
-export const routeWidgets:RouteWidgets<State, Pages> = 
-  {
-    home:route(routeUpdaters.home.url, routeUpdaters.home.jumpTo),
-    aboutUs:route(routeUpdaters.aboutUs.url, routeUpdaters.aboutUs.jumpTo),
-    contactUs:route(routeUpdaters.contactUs.url, routeUpdaters.contactUs.jumpTo),
-    products:route(routeUpdaters.products.url, routeUpdaters.products.jumpTo),
-    // product:route(routeUpdaters.product.url, routeUpdaters.product.jumpTo)
-  }

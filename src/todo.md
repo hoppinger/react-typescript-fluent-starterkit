@@ -1,6 +1,7 @@
 # Doing
+[ ] 404
 [ ] readme and coding guidelines
-  [ ] logo in header
+[ ] logo in header
 [ ] footer
   [ ] inside <footer> tag, navbar with sticky-bottom class
   [ ] move to layout

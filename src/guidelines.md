@@ -501,10 +501,55 @@ productsWidget(currentState.lastUpdate)([currentState.shoppingCart, currentState
 
 
 ## Routing and pages
-each page carries its parameters
-each page carries its state
+**Routing is done with type safety in the first place.** Each page is defined with its own type, containing a url definition (with both url and parameters for TypeScript to parse), and the local state of the page. For example, consider a website with five pages\:
 
-type safety
+```ts
+export type Pages =
+  {
+    home:{ url:[] },
+    products:{ url:["products"], pageState:ProductsState },
+    aboutUs:{ url:["about-us"] }
+    contactUs:{ url:["contact-us"], pageState:ContactUsState }
+    product:{ url:["product", { productId : number }], pageState?:Unit }
+  }
+```
+
+The type of the url's is, for now, just a tuple with the url strings and the parameters with their expected type. 
+
+Thanks to TypeScript' advanced types magic, the type of `Pages` can be automatically turned in a discriminated union by the `CurrentPage<Pages>` helper. Indeed, if you look at [the root state](./site/root/rootState.ts), you will see 
+
+```ts
+export type State = {
+  page:CurrentPage<Pages>,
+  ...
+}
+```
+
+so that the conversion of `Pages` into a usable structure is taken care automatically for us.
+
+> Note that starting from TypeScript 4.1 it will be possible for the url type to be a regular React route, but for now we have to accept this temporary compromise.
+
+The next step is to define how the parameters of a parsed route are turned into an instance of a page to be stored in the state\:
+
+```ts
+export const routeBuilders:RouteBuilders<State,Pages> = {
+  ...
+  contactUs: {
+    make: (params:PageParams<Pages["contactUs"]>) => 
+      ({ kind:"contactUs", params:params, pageState:initialContactUsState })
+    },
+  products: {
+    make: (params:PageParams<Pages["products"]>) => 
+      ({ kind:"products", params:params, pageState:initialProductsState })
+    }
+}
+```
+
+In this example, there is barely any conversion done between `pageState` and `params`, but one could easily imagine that the `params` could be used to start up some API call (for example, in order to bootstrap an API call with the right parameters).
+
+The route updaters are then defined based on the `routeBuilders`, which are then further used inside the React router. Note that all the types can be derived from the original type definition of `Pages`, leading to type safety and a higher degree of extensibility without errors. Check this out in action\: [routes state and updaters](./site/root/routes/routesState.ts) and [routes widget](./site/root/routes/routesWidget.ts).
+
+Note that if you change the `Pages` type, a series of type errors will guide you to add all the extra updaters and widgets you need. The only thing you still need to do is add the actual route to `routes` in [routes widget](./site/root/routes/routesWidget.ts).
 
 
 
