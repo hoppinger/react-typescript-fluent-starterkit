@@ -553,10 +553,66 @@ Note that if you change the `Pages` type, a series of type errors will guide you
 
 
 
-## Performance consideration
-`shouldComponentUpdate` and `lastUpdate`
-keys
+## Performance considerations
+React uses sophisticated, high performance heuristics to try and process visual updates in real time (60 frames per second). React is not perfect, and so we might need to use some tools to influence and guide this process so that performance is as snappy as it goes.
 
+
+### Keys and reconciliation
+In most cases, this performance is easy to achieve because the sheer amount of things that actually changed in the DOM are not many, even when the DOM is huge. This is only possible if the DOM is easy to reconcile, that is if all the elements of the DOM are marked with `key` properties so that React can quickly determine which elements should be reconciled with which elements. Without `key` properties, React must look at all the siblings with the same structure, which might cost a lot of time especially when dealing with a longer list.
+
+This means that we must extensively use `key` properties in our React applications, and take React complaints about missing keys very seriously.
+
+### `shouldComponentUpdate`
+Sometimes, when a widget updates, we can exclude that other widgets might need to update as well. For example, when the shopping cart changes, we might want to reassure React that the huge element containing all the products and categories does not need to be updated at all. By offering React this binding advice we can save it a lot of work to reconcile elements in the DOM which did not change at all. 
+
+> The guru says: "the fastest code to run is the code you do not execute."
+
+An easy way to achieve this, is to save these hints in a field in the root state such as `lastUpdate`\:
+
+```ts
+export type State = {
+  lastUpdate?:"shopping cart" | "products"
+}
+```
+
+Each update of the root state can then conservatively set the `lastUpdate`\:
+
+```ts
+export const stateUpdaters = {
+  updateContactUsState:(contactUsUpdater:Updater<ContactUsState>) => 
+    (currentState:State):State => 
+      ({...currentState, 
+          ...
+          lastUpdate:undefined
+        }),
+  updateShoppingCartState:(shoppingCartUpdater:Updater<ShoppingCartState>) => 
+  (currentState:State):State => 
+    ({...currentState, 
+      ...,
+      lastUpdate:"shopping cart"
+    }),     
+  updateProductsState:(productsUpdater:Updater<ProductsState>) => 
+  (currentState:State):State => 
+    ({...currentState, 
+      ...
+      lastUpdate:"products"
+    }),     
+  routes:routeUpdaters
+}
+```
+
+We can then wrap the widget that renders the products inside a `shouldComponentUpdate` so that the big products widget can be skipped for all the updates that only have to do with the shopping cart. The shopping cart will then feel much snazzier\:
+
+```ts
+    any<DoubleUpdater<ShoppingCartState, ProductsState>>()([
+      shouldComponentUpdate<DoubleUpdater<ShoppingCartState, ProductsState>>(lastUpdate != "shopping cart", productsWidget
+      ),
+      ...
+    ]).wrapHTML(productsLayout.row)
+```
+
+### Streaming rendering
+Sometimes we might be tempted
 
 
 ## General hygiene conventions
