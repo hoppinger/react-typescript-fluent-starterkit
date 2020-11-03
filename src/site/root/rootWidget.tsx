@@ -2,10 +2,11 @@ import { inl, any, browserRouter, fromJSX, IOWidget, link, notFoundRouteCase, ro
 import React from 'react';
 import { applyDoubleUpdater, StandardLocalWidget, Updater } from "../../widgets-extras";
 import { initialState, Person, personUpdaters, ProductId, State, stateUpdaters } from "./rootState";
-import { footer, navigation, routes } from "./routes/routesWidget";
+import { routes } from "./routes/routesWidget";
 import { contactUsWidget } from "./contactUs/contactUsWidget";
 import { rootLayout } from "./rootLayout";
 import { productsWidget } from "./products/productsWidget";
+import { footer, navigation } from "./headerAndFooter/headerAndFooterWidget";
 
 export const page:IOWidget<State, Updater<State>> = currentState =>
   currentState.page.kind == "contactUs" ?
@@ -13,7 +14,7 @@ export const page:IOWidget<State, Updater<State>> = currentState =>
       .map(stateUpdaters.updateContactUsState)
   :
   currentState.page.kind == "products" ?
-    productsWidget(currentState.lastUpdate)([currentState.shoppingCart, currentState.page.pageState])
+    productsWidget(currentState.lastUpdate)([currentState.shoppingCart, currentState.productsState])
       .map(updater => 
           applyDoubleUpdater(
             updater, 

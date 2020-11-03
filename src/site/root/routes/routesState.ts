@@ -2,12 +2,11 @@ import { route, Unit } from "widgets-for-react"
 import { State } from "../rootState";
 import { PageParams, RouteBuilders, RouteUpdaters, Updater } from "../../../widgets-extras";
 import { ContactUsState, initialContactUsState } from "../contactUs/contactUsState";
-import { initialProductsState, ProductsState } from "../products/productsState";
 
 export type Pages =
   {
     home:{ url:[] },
-    products:{ url:["products"], pageState:ProductsState },
+    products:{ url:["products"] },
     aboutUs:{ url:["about-us"] }
     contactUs:{ url:["contact-us"], pageState:ContactUsState }
     // product:{ url:["product", { productId : number }], pageState?:Unit }, // <- pageState will become async loader
@@ -28,7 +27,7 @@ export const routeBuilders:RouteBuilders<State,Pages> = {
     },
   products: {
     make: (params:PageParams<Pages["products"]>) => 
-      ({ kind:"products", params:params, pageState:initialProductsState })
+      ({ kind:"products", params:params })
     },
   // product: {
   //   make: (params:PageParams<Pages["product"]>) => 

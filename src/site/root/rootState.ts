@@ -5,7 +5,7 @@ import { Link } from "react-router-dom"
 import { CurrentPage, StandardLocalWidget, Updater } from "../../widgets-extras";
 import { Pages, routeUpdaters } from "./routes/routesState";
 import { ContactUsState } from "./contactUs/contactUsState";
-import { ProductsState } from "./products/productsState";
+import { initialProductsState, ProductsState } from "./products/productsState";
 import { initialShoppingCartState, ShoppingCartState } from "./shoppingCart/shoppingCartState";
 
 export type ProductId = number
@@ -22,12 +22,14 @@ export const personUpdaters = {
 export type State = {
   page:CurrentPage<Pages>,
   shoppingCart:ShoppingCartState,
+  productsState:ProductsState,
   lastUpdate?:"shopping cart" | "products"
 }
 
 export const initialState:State = ({ 
   page:{ kind:"home", params:{} }, 
-  shoppingCart:initialShoppingCartState
+  shoppingCart:initialShoppingCartState,
+  productsState:initialProductsState
 })
 
 export const stateUpdaters = {
@@ -48,11 +50,8 @@ export const stateUpdaters = {
     }),     
   updateProductsState:(productsUpdater:Updater<ProductsState>) => 
   (currentState:State):State => 
-    ({...currentState, 
-      page:
-        currentState.page.kind == "products" ?
-          {...currentState.page, pageState:productsUpdater(currentState.page.pageState)}
-        : currentState.page,
+    ({...currentState,
+      productsState:productsUpdater(currentState.productsState),
       lastUpdate:"products"
     }),     
   routes:routeUpdaters

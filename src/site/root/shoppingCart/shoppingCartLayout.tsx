@@ -4,7 +4,7 @@ import { Form, Button, Card, Container, Row, Col, Spinner, Jumbotron, InputGroup
 import { string } from 'widgets-for-react';
 import { ProductInfo } from '../products/productsState';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlusCircle, faMinusCircle, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faPlusCircle, faMinusCircle, faTimes, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 
 export const shoppingCartLayout = ({
   sticky:(html:JSX.Element) => 
@@ -28,5 +28,16 @@ export const shoppingCartLayout = ({
       <Col lg="1">
         <FontAwesomeIcon style={{ cursor:"pointer" }} onClick={_ => props.onXClick()} icon={faTimes} />
       </Col>
-    </Row>
+    </Row>,
+  shoppingCartIcon:(props:{ total:number, onClick:() => void}) =>
+  <div 
+    style={ { position:"absolute", top:"5px", right:"5px", cursor:"pointer" }}
+    onClick={_ => props.onClick()}>
+    <FontAwesomeIcon icon={faShoppingCart} size="2x"/>
+    <div className="rounded text-center" 
+      style={ { position:"absolute", top:"5px", right:"2px", backgroundColor:"white", 
+      minWidth:"1.5em", fontSize:"10px" }}>
+      {props.total}
+    </div>
+  </div>
 })

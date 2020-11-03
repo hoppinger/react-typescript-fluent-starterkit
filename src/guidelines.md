@@ -76,6 +76,9 @@ The structure of the project at the time of writing (this might of course change
   └ shoppingCartWidget.tsx
 ```
 
+**Not all components will feature all four main groups.** For example, a component might only have a state and an API that are used by multiple sub\-components, whereas another component might only feature widget and layout because it only performs rendering. For example, consider the situation where all state definitions and API calls for products are stored at the root level of the `Products` component (think about API's such as `createProduct`, `getAllProducts`, `addProductToFavorites`, etc.) and used throughout the whole hierarchy of product\-related sub\-components.
+
+
 ### State file
 **Everything we do is type safe.** 
 
@@ -119,7 +122,7 @@ type OrderState = {
   restaurant:AsyncState<Restaurant>,
   products:AsyncState<Product[]>,
   selection:SelectedProduct[]
-} 
+}
 ```
 
 Now the `kind` also acts as documentation, and the fields are grouped so that we know which fields come together, and which do not. Unfortunately, there still is some repetition in the definition of `restaurant` and `products`.
@@ -246,7 +249,13 @@ We make heavy use of validation checks when parsing the results. We skip anythin
 
 There is a clear barrier between the data that comes from the API, and which has type `any` (the only place where `any` is acceptable), and after parsing, data is guaranteed to have the right structure.
 
-The API file is also responsible for turning the data into the structure that the state requires. We do not expose raw, unprocessed data directly coming from the API without cleaning it up first. For example, we will turn an array into a `Map` or an `OrderedMap`, we will group data in categories, flatten data with `flatMap`, and anything else that is needed to protect the main application from the details of how data is fetched.
+The API file is also responsible for turning the data into the structure that the state requires. We do not expose raw, unprocessed data directly coming from the API without cleaning it up first. For example, we can turn an array into a `Map` or an `OrderedMap`, we will group data in categories, flatten data with `flatMap`, and anything else that is needed to protect the main application from the details of how data is fetched.
+
+> The format of the data required by the application, and whether or not to use arrays, maps, ordered maps, etc. is very application\-dependent. For example\:
+> - if you need to store a series of things that you will only render, then an array is a simple and fast solution; 
+> - if you need to find and update items based on their primary key often, then a `Map` is probably the best solution;
+> - if you need to process the whole collection often, with a combination of `map`, `filter`, `reduce`, or `flatMap`, then `Immutable.List` might be a good fit.
+> Make sure to spend a reasonable amount of time analysing the requirements of your application. The wrong choice can have significant impact on performance and maintainability, and a refactor can be expensive or might even be postponed indefinitely.
 
 For example, consider how we could define an API call for getting products by splitting it into:
 * the direct API call, `getRawProducts`, that gives us an array back;
@@ -267,7 +276,6 @@ export const loadProducts = () : AsyncState<OrderedMap<ProductId, ProductInfo>> 
       )
     }, 250)))
 ```
-
 
 
 #### About `flatMap`
@@ -386,6 +394,9 @@ export const productLayout = ({
       </Card>
 })
 ```
+
+> Whenever rendering `Immutable.X` collections, **remember to use `.ToArray()`**\: React cannot render `Immutable.X` natively, and must first be converted to arrays.
+
 
 The consumer of this functional component is a widget which is responsible for the proper translation of the `addProduct` event into data that will further be consumed along the way\:
 
@@ -563,6 +574,9 @@ In most cases, this performance is easy to achieve because the sheer amount of t
 This means that we must extensively use `key` properties in our React applications, and take React complaints about missing keys very seriously.
 
 ### `shouldComponentUpdate`
+
+> **Premature optimization is the root of all evil.** Before applying the content of this section, make sure to _thoroughly benchmark_ rendering time. This is harder to do than it looks. The simplest way to notice this is when button responses and UI updates become sluggish as the DOM grows in size, or if takes too long to render a large update such as right after an API call delivers lots of data to the page.
+
 Sometimes, when a widget updates, we can exclude that other widgets might need to update as well. For example, when the shopping cart changes, we might want to reassure React that the huge element containing all the products and categories does not need to be updated at all. By offering React this binding advice we can save it a lot of work to reconcile elements in the DOM which did not change at all. 
 
 > The guru says: "the fastest code to run is the code you do not execute."
@@ -604,12 +618,15 @@ export const stateUpdaters = {
 We can then wrap the widget that renders the products inside a `shouldComponentUpdate` so that the big products widget can be skipped for all the updates that only have to do with the shopping cart. The shopping cart will then feel much snazzier\:
 
 ```ts
-    any<DoubleUpdater<ShoppingCartState, ProductsState>>()([
-      shouldComponentUpdate<DoubleUpdater<ShoppingCartState, ProductsState>>(lastUpdate != "shopping cart", productsWidget
-      ),
-      ...
-    ]).wrapHTML(productsLayout.row)
+  any<DoubleUpdater<ShoppingCartState, ProductsState>>()([
+    shouldComponentUpdate<DoubleUpdater<ShoppingCartState, ProductsState>>(lastUpdate != "shopping cart", productsWidget
+    ),
+    ...
+  ]).wrapHTML(productsLayout.row)
 ```
+
+> In general, there are numerous widgets such as `shouldComponentUpdate` that expose the React lifecycle. Make use of these widgets to achieve a more fine\-grained control over when things happen in your application.
+
 
 ### Streaming rendering
 Sometimes we might be temptedto render a large list in one go. If there are hundreds of products, contacts, or whatever else in a list though, adding all of those elements to the DOM in one go might take upwards of **seconds**, which can be awful for the performance perception.
@@ -669,3 +686,36 @@ We use very few npm packages. The usual suspects, `React`, `react router dom`, `
 We absolutely do not use other DOM\-manipulation libraries that might conflict with React!
 
 We use formatting guidelines as defined by each project team **in full consensus**. Hoppinger\-broad formatting guidelines will later appear, but this process will take a bit longer.
+
+
+
+# Feedback to process
+
+## Korstiaan
+- `decreaseAndRemoveProduct` could also be split
+  - then throw an error with an appropriate Option
+
+- `try-catch` vs _API validation_
+  - meticulously check inputs from APIs
+  - in the catch a Sentry error
+  - at least an error component
+  - `componentDidCatch` around `async`s
+
+- `componentDidCatch` around all pages
+  - in routes
+
+- `pageState` zo klein mogelijk houden
+
+- `React.memo`
+
+- windowing/batch rendering
+  - just make a widget out of it
+
+
+## Francesco
+- type safety when using the spread operator and inference in lambdas
+  - or use lenses
+
+
+## Steven
+- use this as the startup tutorial in the widget library
