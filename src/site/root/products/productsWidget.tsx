@@ -1,6 +1,6 @@
 import { any, async, fromJSX, inl, inr, IOWidget, onlyIf, Unit, wait } from "widgets-for-react"
 import React from 'react';
-import { DoubleUpdater, shouldComponentUpdate, StandardLocalGlobalWidget, StandardLocalWidget, Updater } from "../../../widgets-extras";
+import { DoubleUpdater, shouldComponentUpdate, StandardLocalGlobalWidget, StandardLocalWidget, timedCounterTo, Updater } from "../../../widgets-extras";
 import { LoadingProductsState, ProductId, ProductInfo, ProductsState, productsUpdaters } from "./productsState";
 import { productsLayout } from "./productsLayout";
 import { validations } from "../../../shared";
@@ -23,10 +23,9 @@ export const productsWidget = (lastUpdate:State["lastUpdate"]) : StandardLocalGl
     any<DoubleUpdater<ShoppingCartState, ProductsState>>()([
       shouldComponentUpdate<DoubleUpdater<ShoppingCartState, ProductsState>>(lastUpdate != "shopping cart",
         any<DoubleUpdater<ShoppingCartState, ProductsState>>()([
-          onlyIf<DoubleUpdater<ShoppingCartState, ProductsState>>(currentState.renderUpTo < currentState.productsPerPage, 
-            wait<Updater<number>>(5, { key:"renderUpTo updater" })(() => x => x + 5).map(productsUpdaters.renderUpTo)
-              .map(_ => inr(_))
-          ),
+          timedCounterTo(currentState.renderUpTo, currentState.productsPerPage)
+            .map(productsUpdaters.renderUpTo)
+            .map(_ => inr(_)),
           ...currentState.products
             .skip(currentState.currentPage * currentState.productsPerPage)
             .take(currentState.renderUpTo)

@@ -1,5 +1,5 @@
 import React from 'react';
-import { deconstruct, Action, Fun, IOWidget, Route, Sum, Widget, fromJSX } from "widgets-for-react"
+import { Option, deconstruct, Action, Fun, IOWidget, Route, Sum, Widget, fromJSX, a, Unit, onlyIf, wait } from "widgets-for-react"
 
 export const applyDoubleUpdater =
   <outerState, innerState, containerState>(
@@ -106,4 +106,16 @@ export const shouldComponentUpdate = <o>(shouldUpdate:boolean, inner:Widget<o> )
       { 
         shouldUpdate, inner, onDone:setState
       })
+  )
+
+export const tryCatch = <a,b>(f:Fun<a,Option<b>>, fallback:Fun<a,b>) : Fun<a,b> => a =>
+  deconstruct<Unit, b, b>(
+    _ => fallback(a),
+    b => b,
+    f(a)
+  )
+
+export const timedCounterTo = (currentValue:number, maxValue:number, updateDelay?:number) =>
+  onlyIf<Updater<number>>(currentValue < maxValue, 
+    wait<Updater<number>>(updateDelay || 5, { key:`timed counter updater` })(() => x => x + 5)
   )

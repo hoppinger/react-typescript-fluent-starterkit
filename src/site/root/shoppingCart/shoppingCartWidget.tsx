@@ -3,7 +3,7 @@ import React from 'react';
 import { Button } from "react-bootstrap";
 import { ShoppingCartState, shoppingCartUpdaters } from "./shoppingCartState";
 import { ShoppingProductsState } from "../products/productsState";
-import { Updater } from "../../../widgets-extras";
+import { tryCatch, Updater } from "../../../widgets-extras";
 import { shoppingCartLayout } from "./shoppingCartLayout";
 
 export const shoppingCartWidget = 
@@ -20,7 +20,13 @@ export const shoppingCartWidget =
             <shoppingCartLayout.product 
               product={product} 
               amount={amount}
-              onMinusClick={() => setState(shoppingCartUpdaters.decreaseOrRemoveProduct(productId))}
+              onMinusClick={() => 
+                setState(
+                  tryCatch<ShoppingCartState,ShoppingCartState>(
+                    shoppingCartUpdaters.tryDecreaseProduct(productId), 
+                    shoppingCartUpdaters.removeProduct(productId)
+                  )
+                )}
               onPlusClick={() => setState(shoppingCartUpdaters.addProduct(productId))}
               onXClick={() => 
                 confirm(`Are you sure you want to remove ${productsState.products.get(productId)?.name}?`) ? 

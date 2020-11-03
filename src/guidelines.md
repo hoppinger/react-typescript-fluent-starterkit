@@ -527,6 +527,9 @@ export type Pages =
 
 The type of the url's is, for now, just a tuple with the url strings and the parameters with their expected type. 
 
+> It might be tempting to define a `pageState` that contains as much data as possible that is relevant for each current page. One might expect that this way the global state will remain smaller, and thus easier to manage. Unfortunately, caution is advisable. It happens very often that data which was only relevant for a page ultimately ends up being used a bit everywhere. Thus, even though one might expect advantages from over\-splitting, be careful, and whenever in doubt put a state in a field of the root state instead of inside a `pageState`.
+
+
 Thanks to TypeScript' advanced types magic, the type of `Pages` can be automatically turned in a discriminated union by the `CurrentPage<Pages>` helper. Indeed, if you look at [the root state](./site/root/rootState.ts), you will see 
 
 ```ts
@@ -628,7 +631,7 @@ We can then wrap the widget that renders the products inside a `shouldComponentU
 > In general, there are numerous widgets such as `shouldComponentUpdate` that expose the React lifecycle. Make use of these widgets to achieve a more fine\-grained control over when things happen in your application.
 
 
-### Streaming rendering
+### Streaming/batched rendering
 Sometimes we might be temptedto render a large list in one go. If there are hundreds of products, contacts, or whatever else in a list though, adding all of those elements to the DOM in one go might take upwards of **seconds**, which can be awful for the performance perception.
 
 > Ask Francesco how him and me spent _days_ optimizing an API call, to finally accept that the API was fast but rendering hundreds of products to the DOM took a full five seconds extra!
@@ -665,6 +668,15 @@ onlyIf<DoubleUpdater<ShoppingCartState, ProductsState>>(
 )
 ```
 
+Note that there's a widget that encapsulates this behavior\:
+
+```ts
+export const timedCounterTo = (currentValue:number, maxValue:number, updateDelay?:number) =>
+  onlyIf<Updater<number>>(currentValue < maxValue, 
+    wait<Updater<number>>(updateDelay || 5, { key:`timed counter updater` })(() => x => x + 5)
+  )
+```
+
 
 ## General hygiene conventions
 We use `camelCase` for values and functions.
@@ -692,9 +704,6 @@ We use formatting guidelines as defined by each project team **in full consensus
 # Feedback to process
 
 ## Korstiaan
-- `decreaseAndRemoveProduct` could also be split
-  - then throw an error with an appropriate Option
-
 - `try-catch` vs _API validation_
   - meticulously check inputs from APIs
   - in the catch a Sentry error
@@ -704,13 +713,7 @@ We use formatting guidelines as defined by each project team **in full consensus
 - `componentDidCatch` around all pages
   - in routes
 
-- `pageState` zo klein mogelijk houden
-
 - `React.memo`
-
-- windowing/batch rendering
-  - just make a widget out of it
-
 
 ## Francesco
 - type safety when using the spread operator and inference in lambdas
