@@ -9,6 +9,7 @@ export type Pages =
     products:{ url:["products"] },
     aboutUs:{ url:["about-us"] }
     contactUs:{ url:["contact-us"], pageState:ContactUsState }
+    errorHandlingTest:{ url:["error-handling-test"] }
     // product:{ url:["product", { productId : number }], pageState?:Unit }, // <- pageState will become async loader
   }
 
@@ -28,6 +29,10 @@ export const routeBuilders:RouteBuilders<State,Pages> = {
   products: {
     make: (params:PageParams<Pages["products"]>) => 
       ({ kind:"products", params:params })
+    },
+  errorHandlingTest: {
+    make: (params:PageParams<Pages["errorHandlingTest"]>) => 
+      ({ kind:"errorHandlingTest", params:params })
     },
   // product: {
   //   make: (params:PageParams<Pages["product"]>) => 
@@ -54,6 +59,11 @@ export const routeUpdaters:RouteUpdaters<State,Pages> = {
   products: {
     jumpTo: (params:PageParams<Pages["products"]>) : Updater<State> => s0 => 
       ({...s0, page:routeBuilders.products.make(params) }),
+      url:"/products"
+    },
+  errorHandlingTest: {
+    jumpTo: (params:PageParams<Pages["errorHandlingTest"]>) : Updater<State> => s0 => 
+      ({...s0, page:routeBuilders.errorHandlingTest.make(params) }),
       url:"/"
     },
   // product: {

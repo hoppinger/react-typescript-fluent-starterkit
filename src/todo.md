@@ -6,6 +6,8 @@
 [ ] home with special offers
 [ ] responsiveness, especially of shopping cart
 [ ] restore home url to "/"
+[ ] about us page
+  [ ] make it pretty
 [ ] implement animations from https://www.framer.com/motion/
 [ ] implement page transitions with React transition group
 [ ] remote and deferred validation of contact-us form
@@ -27,6 +29,11 @@
 
 
 # Make it production ready?
+[ ] product page
+  [ ] variants
+  [ ] options
+  [ ] locations/shops
+    [ ] delivery vs pickup (for restaurant-type clients)
 [ ] scaffold with new scaffolder and new admin interface and replace placeholder API
 [ ] options, option groups, and product categories
 [ ] multi-tenancy, roles and rights
@@ -35,7 +42,10 @@
 [ ] server-side strip dangerous tags from product descriptions (they are set as HTML)
 [ ] discounts
 [ ] 404 route
-
+[ ] deploy
+  [ ] streamline deployment
+[ ] guidelines for C#/backend development
+[ ] Sentry
 
 # Advanced stuff for the future
 [ ] use lenses (without commit!) on all stateUpdaters
@@ -47,6 +57,7 @@
 
 
 # Done
+[x] use `componentDidCatch` around some page which is broken on purpose
 [x] Hoppinger e-commerce logo in header
 [x] ironic footer with hipster text
 [x] pagination of products

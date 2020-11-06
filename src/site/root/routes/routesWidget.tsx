@@ -15,6 +15,7 @@ export const routeWidgets:RouteWidgets<State, Pages> =
     aboutUs:route(routeUpdaters.aboutUs.url, routeUpdaters.aboutUs.jumpTo),
     contactUs:route(routeUpdaters.contactUs.url, routeUpdaters.contactUs.jumpTo),
     products:route(routeUpdaters.products.url, routeUpdaters.products.jumpTo),
+    errorHandlingTest:route(routeUpdaters.errorHandlingTest.url, routeUpdaters.errorHandlingTest.jumpTo),
     // product:route(routeUpdaters.product.url, routeUpdaters.product.jumpTo)
   }
 
@@ -25,5 +26,6 @@ export const routes = () =>
     // routeWidgets.product,
     routeWidgets.contactUs,
     routeWidgets.aboutUs,
+    routeWidgets.errorHandlingTest,
     notFoundRouteCase<Updater<State>>(stateUpdaters.routes.home.jumpTo),
   ])

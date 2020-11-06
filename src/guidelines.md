@@ -245,9 +245,39 @@ The results of an API call are formatted, so that they match the structure that 
 
 **We do not trust anything that comes from a REST API.** Arrays of field data will be empty, fields will be missing, fields will have the wrong type, etc. Anything that can go wrong, will go wrong.
 
-We make heavy use of validation checks when parsing the results. We skip anything that looks even remotely suspicious. We use `try-catch` whenever looking up data from arrays.
+We make heavy use of validation checks when parsing the results. We skip anything that looks even remotely suspicious. There is a clear barrier between the data that comes from the API, and which has type `any` (the only place where `any` is acceptable), and after parsing, data is guaranteed to have the right structure.
 
-There is a clear barrier between the data that comes from the API, and which has type `any` (the only place where `any` is acceptable), and after parsing, data is guaranteed to have the right structure.
+If there is a good reason not to implement a more sophisticated parsing/validation of raw API data, at least use `try-catch` whenever doing something like looking up data from arrays that might be empty, or performing any other unsafe operation. In general, though, we use a more solid strategy. For each value of type `any` that comes from an API call, we perform the following\:
+* check that each field is there;
+* check that each field has the right type;
+* (optional, only for unions) check that the field value is a valid entry in the union;
+* recursively proceed with a sub\-check for each item of each array field.
+
+We can automate a lot of this work though, so check if the existing utilities such as our own [`canSafelyCast`](./widgets-extras.ts) can help. [In our example](./site/root/products/productsApi.ts) you can see that we only need to declare a type\-safe (meaning that the compiler will guide you telling you which fields need what validators)\:
+
+```ts
+const productValidator:TypeCastingValidator<ProductInfo, keyof ProductInfo> = 
+  {
+    name:{ kind:"string" },
+    description:{ kind:"string" },
+    imageURL:{ kind:"string" },
+    price:{ kind:"number" },
+    productId:{ kind:"number" },
+    rating:{ kind:"number", customValidationLogic:(rating:number) => rating >= 0 && rating <= 5 }
+  }
+```
+
+and then just invoke it on untrusted values from the API\:
+
+```ts
+List(products)
+  .map(v => canSafelyCast<ProductInfo>(productValidator, v))
+  .flatMap(listFromOption))
+```
+
+This mechanism will ensure that all invalid items are at least filtered away, because those could wreak havoc on the stability of the application in components that apparently are not broken because they rely on type safety. For an even more complete and sophisticated approach, jump to our own [OData client](https://github.com/hoppinger/ts-odata-client/blob/master/src/odata/deserilisation.ts).
+
+> Avoid silent errors. It is of course essential to guarantee that our applications work as best as they can, thus filtering away products that cannot be parsed might be a reasonable option, and certainly better than the whole site crashing and not a single product being shown. In case of errors though, it is important to also make sure that our _service_ people can act on it, thus consider logging an error message to the Sentry of your project.
 
 The API file is also responsible for turning the data into the structure that the state requires. We do not expose raw, unprocessed data directly coming from the API without cleaning it up first. For example, we can turn an array into a `Map` or an `OrderedMap`, we will group data in categories, flatten data with `flatMap`, and anything else that is needed to protect the main application from the details of how data is fetched.
 
@@ -566,6 +596,22 @@ The route updaters are then defined based on the `routeBuilders`, which are then
 Note that if you change the `Pages` type, a series of type errors will guide you to add all the extra updaters and widgets you need. The only thing you still need to do is add the actual route to `routes` in [routes widget](./site/root/routes/routesWidget.ts).
 
 
+## Error handling
+**Bugs happen. That's life. That is no excuse for uncatched exceptions.**
+In some cases, React will react (haha!) to malformed DOM's in an extreme way, by showing the white screen of death (WSoD). In particular, errors such as mounting an object somewhere in the DOM will cause React to render nothing at all, and to not even display the slightest useful message.
+
+This sort of bug is, simply put, inacceptable for our end users. Fortunately, React offers a lifecycle method, `componentDidCatch`, which is used to fallback when a child component misbehaves and produces an invalid DOM.
+
+Yes, _there's a widget for that_. You can wrap a widget that might fail in a `componentDidCatch` higher order widget, and by doing so providing a key (that is very important to force a remount of `componentDidCatch`, otherwise it stays stuck in the error state) and an optional fallback widget to render the error.
+
+You can put `componentDidCatch` around whatever you want, depending on what level of granularity is required in the project. 
+
+**We do require for this to be present at least at the root level, or around the main page content, so that the WSoD will never happen.** Whether or not `componentDidCatch` is also used *more* is up to each project team.
+
+> Also make sure that in the fallback we also send an error message to, for example, Sentry in order to get a warning so that our service team can get to work without waiting for customers to tell us themselves. Prevention is better than curing when it comes to bugs!
+
+Jump to [the root widget](./site/root/rootWidget.tsx) to see an example of `componentDidCatch`.
+
 
 ## Performance considerations
 React uses sophisticated, high performance heuristics to try and process visual updates in real time (60 frames per second). React is not perfect, and so we might need to use some tools to influence and guide this process so that performance is as snappy as it goes.
@@ -576,8 +622,7 @@ In most cases, this performance is easy to achieve because the sheer amount of t
 
 This means that we must extensively use `key` properties in our React applications, and take React complaints about missing keys very seriously.
 
-### `shouldComponentUpdate`
-
+### `shouldComponentUpdate` and `React.memo`
 > **Premature optimization is the root of all evil.** Before applying the content of this section, make sure to _thoroughly benchmark_ rendering time. This is harder to do than it looks. The simplest way to notice this is when button responses and UI updates become sluggish as the DOM grows in size, or if takes too long to render a large update such as right after an API call delivers lots of data to the page.
 
 Sometimes, when a widget updates, we can exclude that other widgets might need to update as well. For example, when the shopping cart changes, we might want to reassure React that the huge element containing all the products and categories does not need to be updated at all. By offering React this binding advice we can save it a lot of work to reconcile elements in the DOM which did not change at all. 
@@ -628,7 +673,7 @@ We can then wrap the widget that renders the products inside a `shouldComponentU
   ]).wrapHTML(productsLayout.row)
 ```
 
-> In general, there are numerous widgets such as `shouldComponentUpdate` that expose the React lifecycle. Make use of these widgets to achieve a more fine\-grained control over when things happen in your application.
+> In general, there are numerous widgets (and those that are not can be easily built) such as `shouldComponentUpdate` that expose the React lifecycle. Make use of these widgets to achieve a more fine\-grained control over when things happen in your application.
 
 
 ### Streaming/batched rendering
@@ -702,18 +747,23 @@ We use formatting guidelines as defined by each project team **in full consensus
 
 
 # Feedback to process
-
 ## Korstiaan
-- `try-catch` vs _API validation_
-  - meticulously check inputs from APIs
-  - in the catch a Sentry error
-  - at least an error component
-  - `componentDidCatch` around `async`s
+A useful, and much simpler alternative can often be `React.memo`. `React.memo` performs a comparison between the previous and the next props of a functional component in order to prevent unnecessary rendering. You can even provide a custom comparison function to perform a domain\-specific comparison that is more accurate than the default shallow comparison that React would perform itself.
 
-- `componentDidCatch` around all pages
-  - in routes
+<!-- We define a memoized component like this\:
 
-- `React.memo`
+```tsx
+const Foo = React.memo((props: P) => <>...</>)
+```
+
+and then we use it as follows\:
+
+```tsx
+<Foo />
+``` -->
+
+This performance optimization can prevent re\-renders of functional components without having to implement `shouldComponentUpdate`, and thus might be a lightweight alternative that can unlock faster performance.
+
 
 ## Francesco
 - type safety when using the spread operator and inference in lambdas

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ErrorInfo } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 
 export const rootLayout = {
@@ -11,5 +11,18 @@ export const rootLayout = {
           </Col>
         </Row>
       </Container>
-    </div>
+    </div>,
+  error:(props:{ error:[Error,ErrorInfo]}) =>
+    <>
+    <h1>
+      There was an error in the page.
+    </h1>
+    <h2>
+      The name of the error is: {props.error[0].name}
+    </h2>
+    <p>
+      The message of the error is: {props.error[0].message}
+    </p>
+  </>
+
 }

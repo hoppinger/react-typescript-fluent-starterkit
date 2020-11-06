@@ -1,8 +1,27 @@
-import { OrderedMap } from "immutable";
+import { List, OrderedMap } from "immutable";
 import { AsyncState, HttpResult, loadingAsyncState, Unit } from "widgets-for-react";
+import { listFromOption, TypeCastingValidator, canSafelyCast } from "../../../widgets-extras";
 import { ProductId, ProductInfo, ProductsState } from "./productsState";
 
-export const mockProducts:Array<ProductInfo> = [
+const mockBrokenProducts:Array<any> = [
+  {
+    productId:-1,
+    name:"Broken product with wrong price and missing imageUrl",
+    description: "This product ensures that the application properly handles broken input.",
+    rating:4,
+    price:"15",
+  },
+  {
+    productId:-2,
+    name:"Broken product with rating out of range",
+    description: "Something to trim your beard with. Or whatever else, we don't have any preconceptions.",
+    rating:40,
+    price:15,
+    imageURL:"images/gilletteFusionRazor.jpg"
+  },
+]
+
+const mockProducts:Array<any> = [
   {
     productId:1,
     name:"Gillette Fusion Razor",
@@ -69,7 +88,7 @@ export const mockProducts:Array<ProductInfo> = [
   },
   {
     productId:9,
-    name:"philipsAirfryer",
+    name:"Philips Airfryer",
     description: "For when you need to pretend that you can both eat fries and stick to your diet.",
     rating:3,
     price:65,
@@ -88,6 +107,7 @@ export const mockProducts:Array<ProductInfo> = [
 const getRawProducts = () : Promise<Array<ProductInfo>> =>
   new Promise((res,rej) => setTimeout(() => res(
     [
+      ...mockBrokenProducts,
       ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, 
       ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, 
       ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, ...mockProducts, 
@@ -104,14 +124,28 @@ const getRawProducts = () : Promise<Array<ProductInfo>> =>
     ].map((p,i) => ({...p, productId:i })))))
 
 
-const formatProducts = (products:Array<ProductInfo>) : OrderedMap<ProductId, ProductInfo> =>
+const formatProducts = (products:List<ProductInfo>) : OrderedMap<ProductId, ProductInfo> =>
   OrderedMap(products.map(pi => [pi.productId, pi]))
 
+const productValidator:TypeCastingValidator<ProductInfo, keyof ProductInfo> = 
+  {
+    name:{ kind:"string" },
+    description:{ kind:"string" },
+    imageURL:{ kind:"string" },
+    price:{ kind:"number" },
+    productId:{ kind:"number" },
+    rating:{ kind:"number", customValidationLogic:(rating:number) => rating >= 0 && rating <= 5 }
+  }
 
 export const loadProducts = () : AsyncState<OrderedMap<ProductId, ProductInfo>> =>
   loadingAsyncState(() => 
     new Promise((res,rej) => setTimeout(() => {
       getRawProducts().then(products => 
-        res({ kind:"result", value:formatProducts(products), status:200 })
+        res({ kind:"result", value:
+          formatProducts(
+            List(products)
+              .map(v => canSafelyCast<ProductInfo>(productValidator, v))
+              .flatMap(listFromOption)), 
+          status:200 })
       )
     }, 250)))

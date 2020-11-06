@@ -29,6 +29,7 @@ export const navigation:StandardLocalWidget<State> = (state:State) =>
       navigationItemLink("About us", "aboutUs")(state),
       navigationItemLink("Products", "products")(state),
       navigationItemLink("Contact us", "contactUs")(state),
+      navigationItemLink("Error handling test", "errorHandlingTest")(state),
       fromJSX(setState => 
         <shoppingCartLayout.shoppingCartIcon 
           total={state.shoppingCart.products.reduce((total,amount,productId) => total + amount, 0)}
