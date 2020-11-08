@@ -1,6 +1,6 @@
 import { inl, any, browserRouter, fromJSX, IOWidget, link, notFoundRouteCase, route, routerSwitch, stateful, Unit, Widget } from "widgets-for-react"
 import React from 'react';
-import { applyDoubleUpdater, componentDidCatch, ErrorBoundary, StandardLocalWidget, Updater } from "../../widgets-extras";
+import { applyDoubleUpdater, componentDidCatch, StandardLocalWidget, Updater } from "../../widgets-extras";
 import { initialState, Person, personUpdaters, ProductId, State, stateUpdaters } from "./rootState";
 import { routes } from "./routes/routesWidget";
 import { contactUsWidget } from "./contactUs/contactUsWidget";

@@ -676,6 +676,37 @@ We can then wrap the widget that renders the products inside a `shouldComponentU
 > In general, there are numerous widgets (and those that are not can be easily built) such as `shouldComponentUpdate` that expose the React lifecycle. Make use of these widgets to achieve a more fine\-grained control over when things happen in your application.
 
 
+A useful, and much simpler alternative can often be `React.memo`. `React.memo` performs a comparison between the previous and the next props of a functional component in order to prevent unnecessary rendering. You can even provide a custom comparison function to perform a domain\-specific comparison that is more accurate than the default shallow comparison that React would perform itself.
+
+We define a memoized component that only rerenders when property `a` in the state changes as follows\:
+
+```tsx
+type State = { a:number, b:number }
+const MemoizeA = React.memo((props: {state:State }) => 
+  <>
+    <h2>Memoized on a</h2>
+    <div>a: {props.state.a}</div>
+    <div>b: {props.state.b}</div>  
+  </>, (prev, curr) => prev.state.a == curr.state.a)
+```
+
+The component can be used exactly as one would expect. This performance optimization can prevent re\-renders of functional components without having to implement `shouldComponentUpdate`, and thus might be a lightweight alternative that can unlock faster performance.
+
+An example from our sample application is a wrapper around the product card. Notice that memoization, being part of state management, is widget, not layout work. This is an important aspect of separation of concerns\: we do not want layout and styling to be bothered by anything related to state and property management!
+
+```tsx
+const MemoizedProductCard = React.memo((props: ProductCardProps) => 
+  <productLayout.card key={props.product.productId} product={props.product} addProduct={props.addProduct} />,
+  (prev, curr) => prev.product == curr.product)
+
+export const productWidget = 
+  (products:ShoppingProductsState) => (product:ProductInfo) : Widget<"add to cart"> => 
+  fromJSX(setState =>
+    <MemoizedProductCard product={product} addProduct={() => setState("add to cart")} />
+  )
+```
+
+
 ### Streaming/batched rendering
 Sometimes we might be temptedto render a large list in one go. If there are hundreds of products, contacts, or whatever else in a list though, adding all of those elements to the DOM in one go might take upwards of **seconds**, which can be awful for the performance perception.
 
@@ -747,28 +778,5 @@ We use formatting guidelines as defined by each project team **in full consensus
 
 
 # Feedback to process
-## Korstiaan
-A useful, and much simpler alternative can often be `React.memo`. `React.memo` performs a comparison between the previous and the next props of a functional component in order to prevent unnecessary rendering. You can even provide a custom comparison function to perform a domain\-specific comparison that is more accurate than the default shallow comparison that React would perform itself.
-
-<!-- We define a memoized component like this\:
-
-```tsx
-const Foo = React.memo((props: P) => <>...</>)
-```
-
-and then we use it as follows\:
-
-```tsx
-<Foo />
-``` -->
-
-This performance optimization can prevent re\-renders of functional components without having to implement `shouldComponentUpdate`, and thus might be a lightweight alternative that can unlock faster performance.
-
-
-## Francesco
-- type safety when using the spread operator and inference in lambdas
-  - or use lenses
-
-
 ## Steven
 - use this as the startup tutorial in the widget library

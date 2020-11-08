@@ -1,4 +1,17 @@
 # Doing
+[ ] use lenses (without commit!) on all stateUpdaters
+  [ ] `null`, `undefined`, and `null | x`/`undefined | x` types
+  [ ] options
+  [ ] discriminated unions and sums
+  [ ] actual implementation!
+  [ ] lists, arrays, etc.
+  [ ] deep nesting
+  [ ] distinguish between set, insert, remove and return a different type back
+    [ ] would this work for nested operations?
+  [ ] not pretty
+    [ ] optionMapField1:Option<Map<number,FlatEntity>>
+
+
 [ ] shopping cart
   [ ] "payment" flow
 [ ] integrate with _public site_
@@ -17,10 +30,12 @@
 [ ] fully type-safe routes
 
 
-# Widgets improvements
+# Widget library improvements
+[ ] integrate widget-extras
 [ ] fromJSX only needs one type argument
-[ ] remove Form and Wizard from scaffolder
-[ ] remove div etc. from scaffolder
+[ ] remove unused stuff:
+  [ ] Form and Wizard from scaffolder
+  [ ] remove div etc. from scaffolder
 [ ] undeprecate router stuff
 [ ] fix warning " > widgets-for-react@1.7.1" has incorrect peer dependency "react-router-dom@4.x".
 [ ] fix widget library router (componentDidMount instead of componentWillMount warning)
@@ -44,14 +59,11 @@
 [ ] 404 route
 [ ] deploy
   [ ] streamline deployment
+[ ] integrate with BC
 [ ] guidelines for C#/backend development
 [ ] Sentry
 
 # Advanced stuff for the future
-[ ] use lenses (without commit!) on all stateUpdaters
-  [ ] regular states
-  [ ] within maps, lists, arrays, etc.
-  [ ] inside discriminated unions
 [ ] use in-memory db
 [ ] state builder: pages, db, transients, actions
 

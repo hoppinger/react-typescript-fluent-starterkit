@@ -5,8 +5,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons'
 import { ProductInfo } from '../productsState';
 
+export type ProductCardProps = { product:ProductInfo, addProduct:() => void } 
+
 export const productLayout = ({
-  card:(props:{ product:ProductInfo, addProduct:() => void }) =>
+  card:(props:ProductCardProps) =>
     <Card>
       <Card.Body>
         <Row>

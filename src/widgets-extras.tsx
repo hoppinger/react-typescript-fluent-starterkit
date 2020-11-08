@@ -1,5 +1,5 @@
 import React, { ErrorInfo } from 'react';
-import { List } from 'immutable';
+import { List, Map } from 'immutable';
 import { Option, deconstruct, Action, Fun, IOWidget, Route, Sum, Widget, fromJSX, a, Unit, onlyIf, wait, none, some, nothing } from "widgets-for-react"
 
 export const applyDoubleUpdater =
@@ -200,33 +200,122 @@ export class ComponentDidCatch<a> extends React.Component<ComponentDidCatchProps
   }
 }
 
-export const componentDidCatch = <o,>(key:string, component:Widget<o>, fallback?:IOWidget<[Error,ErrorInfo],o>) : Widget<o> => 
+export const componentDidCatch = <o,>(key:string, component:Widget<o>, fallback:IOWidget<[Error,ErrorInfo],o>) : Widget<o> => 
   fromJSX(setState => 
     React.createElement<ComponentDidCatchProps<o>>(ComponentDidCatch, 
       { 
         onDone:setState,
-        catch:fallback != undefined ? fallback : (_ => nothing()),
+        catch:fallback,
         key
       }, 
       [component.run(setState)])
   )
 
-export class ErrorBoundary extends React.Component<Unit, { hasError:boolean }> {
-  constructor(props:Unit) {
-    super(props)
-    this.state = { hasError: false }
+type MapOperations<k,v> =
+  { 
+    insert:[k,v]
+  } | {
+    update:[k,LensUpdater<v>]
+  } | {
+    remove:k
+  } | {
+    removeIf:[k,Fun<v,boolean>]
   }
 
-  componentDidCatch(error:Error, errorInfo:ErrorInfo) {
-    this.setState({ hasError: true })
+type OptionOperations<v> =
+  { 
+    insert:v | Option<v>
+  } | {
+    remove:Unit
+  } | {
+    update:LensUpdater<v>
+  } | {
+    removeIf:Fun<v,boolean>
   }
 
-  render() {
-    if (this.state.hasError) {
-      return <h1>Something went wrong.</h1>
-    } else {
-      return this.props.children
-    }
+type LensUpdater<a> = 
+  a extends number | boolean | string | null ?
+    a | Updater<a>
+  : a extends Map<infer k, infer v> ? 
+    MapOperations<k,v> | Array<MapOperations<k,v>>
+  : a extends Option<infer v> ? 
+    OptionOperations<v>
+  : Lens<a>
 
-  }
+type NewValue<a, fieldKey extends keyof a> = 
+  a[fieldKey] extends number | boolean | string | null ?
+    a[fieldKey] | Updater<a[fieldKey]>
+  : LensUpdater<a[fieldKey]>
+
+export interface Lens<a> {
+  (_:a): a,
+  field: <fieldKey extends keyof a>(fieldKey:fieldKey, newValue:NewValue<a,fieldKey>) => Lens<a>,
 }
+
+export const Lens = <a, >() : Lens<a> => null!
+
+type FlatEntity = { field1:number, field2:number }
+type PolymorphicEntity = { kind:"kind1", field1:number, field2:number } | { kind:"kind2", field3:string, field4:string } | { kind:"kind3", field5:string, field6:string }
+type State = 
+  {
+    field1:string
+    field2:number
+    field3:boolean
+    optionField1:Option<FlatEntity>
+    optionField2:Option<string>
+    mapField1:Map<number,FlatEntity>
+    mapOptionField1:Map<number, Option<FlatEntity>>
+    // mapUnionField1:Map<number, PolymorphicEntity>
+    // mapMapField1:Map<number, Map<string, { field1:number, field2:number }>>
+    // arrayField1:Array<number>
+    // arrayField2:Array<{ field1:number, field2:number }>
+    // listField1:List<{ field1:number, field2:number }>
+    // listMapField1:List<{ field1:number, field2:boolean, field3:Map<string, { field1:number, field2:boolean }> }>
+    // listOptionField1:List<Option<{ field1:number, field2:number }>>
+    // listUnionField1:List<{ kind:"kind1", field1:number, field2:number } | { kind:"kind2", field3:string, field4:string } | { kind:"kind3", field5:string, field6:string }>
+  }
+
+const stateUpdaters = 
+  Lens<State>()
+
+    // change the value of field1 to "new value"
+    .field("field1", "new value")
+    // change the value of field2 to 101
+    .field("field2", 101)
+    // flip the value of field3: true => false, false => true
+    .field("field3", b => !b)
+    // insert (1,{ field1:1, field2:2 }) into mapField1
+    .field("mapField1", { insert:[1,{ field1:1, field2:2 }] })
+    .field("mapField1", 
+    [
+        // field1 becomes 1 at mapField1[1]
+        { update:[1, Lens<FlatEntity>().field("field1", 1)] },
+        // field1 becomes 2 at mapField1[2]
+        { update:[2, Lens<FlatEntity>().field("field1", 2)] },
+        // field2 is incremented by 1 at mapField1[3]
+        { update:[3, Lens<FlatEntity>().field("field2", x => x + 1)] },
+        // field2 is doubled at mapField1[4]
+        { update:[4, Lens<FlatEntity>().field("field2", x => x * 2)] },
+        // mapField1[5] is removed
+        { remove:5 },
+        // mapField1[6] is removed if its field1 is greater than its field2
+        { removeIf:[6, v => v.field1 > v.field2] }
+      ] )
+    // optionField1 is set to none() if its field1 is negative 
+    .field("optionField1", { removeIf:v => v.field1 < 0 })
+    // optionField1.v.field2 is set to 200 if present
+    .field("optionField1", { update:Lens<FlatEntity>().field("field2", 200) })
+    // optionField1.v.field1 is incremented by 1 if present
+    .field("optionField1", { update:Lens<FlatEntity>().field("field1", x => x + 1) })
+    // mapOptionField1[1] becomes some({ field1:0, field2:0 })
+    .field("mapOptionField1", { insert:[1, some({ field1:0, field2:0 })] })
+    // mapOptionField1[1] becomes none if its field1 is negative, and it remains in the Map
+    .field("mapOptionField1", { update:[1, { removeIf:v => v.field1 < 0 }] })
+    // mapOptionField1[1] gets removed from the map if it is none
+    .field("mapOptionField1", { removeIf:[1, v => v.v.kind == "l"] })
+    // mapOptionField1[1], if present in the map, becomes some({ field1:0, field2:10 })
+    .field("mapOptionField1", { update:[1, { insert:{ field1:0, field2:10 } }] })
+    // mapOptionField1[1], if present in the map, and if it is not none, gets field1 incremented and field2 doubled
+    .field("mapOptionField1", { update:[1, { update:Lens<FlatEntity>().field("field1", x => x + 1).field("field2", x => x * 2) }] })
+
+const newState = () : State => stateUpdaters(null!)
