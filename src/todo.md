@@ -1,26 +1,34 @@
 # Doing
 [ ] use lenses (without commit!) on all stateUpdaters
+  [ ] use builders instead of lambda's everywhere
   [ ] `null`, `undefined`, and `null | x`/`undefined | x` types
-  [ ] options
-  [ ] discriminated unions and sums
+  [ ] unions and sums
+  [ ] collections
+    [ ] lists
+    [ ] arrays
+  [ ] nesting
+    [ ] map^2
+    [ ] list^2
+    [ ] array^2
+    [ ] option^2
+    [ ] option . map
+    [ ] option . list
+    [ ] option . array
+    [ ] option . union
   [ ] actual implementation!
-  [ ] lists, arrays, etc.
-  [ ] deep nesting
-  [ ] distinguish between set, insert, remove and return a different type back
-    [ ] would this work for nested operations?
-  [ ] not pretty
-    [ ] optionMapField1:Option<Map<number,FlatEntity>>
+  [ ] distinguish between set, insert field, remove field, and return a different type back
+    [ ] this would work for nested operations only in case of a separate type, or where the same parameter is both input and output
 
 
 [ ] shopping cart
   [ ] "payment" flow
-[ ] integrate with _public site_
-  [ ] login/registration from _public site_
 [ ] home with special offers
 [ ] responsiveness, especially of shopping cart
 [ ] restore home url to "/"
 [ ] about us page
   [ ] make it pretty
+[ ] integrate with _public site_
+  [ ] login/registration from _public site_
 [ ] implement animations from https://www.framer.com/motion/
 [ ] implement page transitions with React transition group
 [ ] remote and deferred validation of contact-us form

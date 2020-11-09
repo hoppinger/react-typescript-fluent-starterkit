@@ -778,5 +778,9 @@ We use formatting guidelines as defined by each project team **in full consensus
 
 
 # Feedback to process
+## Giuseppe
+we should add a brief introduction to widgets
+  - types narrowing (selection) and widening (map back)
+
 ## Steven
 - use this as the startup tutorial in the widget library

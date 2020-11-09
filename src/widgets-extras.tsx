@@ -277,7 +277,6 @@ type State =
 
 const stateUpdaters = 
   Lens<State>()
-
     // change the value of field1 to "new value"
     .field("field1", "new value")
     // change the value of field2 to 101
