@@ -44,12 +44,12 @@ export const routeUpdaters:RouteUpdaters<State,Pages> = {
   home: {
     jumpTo:(params:PageParams<Pages["home"]>) : Updater<State> => s0 => 
       ({...s0, page:routeBuilders.home.make(params) }),
-    url:"/HOMEDISABLED"
+    url:"/homedisabled"
   },
   aboutUs: {
     jumpTo: (params:PageParams<Pages["aboutUs"]>) : Updater<State> => s0 => 
       ({...s0, page:routeBuilders.aboutUs.make(params) }),
-      url:"/about-us"
+      url:"/" //"/about-us"
     },
   contactUs: {
     jumpTo: (params:PageParams<Pages["contactUs"]>) : Updater<State> => s0 => 
@@ -64,7 +64,7 @@ export const routeUpdaters:RouteUpdaters<State,Pages> = {
   errorHandlingTest: {
     jumpTo: (params:PageParams<Pages["errorHandlingTest"]>) : Updater<State> => s0 => 
       ({...s0, page:routeBuilders.errorHandlingTest.make(params) }),
-      url:"/"
+      url:"/error-handling-test"
     },
   // product: {
   //   jumpTo: (params:PageParams<Pages["product"]>) : Updater<State> => s0 => 

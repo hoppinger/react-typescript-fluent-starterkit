@@ -104,7 +104,7 @@ const mockProducts:Array<any> = [
   },
 ]
 
-const getRawProducts = () : Promise<Array<ProductInfo>> =>
+const getRawProducts = () : Promise<Array<any>> =>
   new Promise((res,rej) => setTimeout(() => res(
     [
       ...mockBrokenProducts,

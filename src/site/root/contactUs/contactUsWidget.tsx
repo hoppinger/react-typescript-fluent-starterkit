@@ -57,7 +57,7 @@ export const contactUsWidget : StandardLocalWidget<ContactUsState> = currentStat
           </contactUsLayout.formItemInGroup>
           { submissionButton(currentState).run(setState) }
       </Form>
-    )
+    ).wrapHTML(contactUsLayout.littleJump)
   :
   fromJSX(_ =>
     <contactUsLayout.thankYou />

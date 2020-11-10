@@ -5,6 +5,7 @@ import { string } from 'widgets-for-react';
 import { ProductInfo } from '../products/productsState';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle, faMinusCircle, faTimes, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+import { motion } from 'framer-motion';
 
 export const shoppingCartLayout = ({
   sticky:(html:JSX.Element) => 
@@ -17,21 +18,36 @@ export const shoppingCartLayout = ({
       onXClick:() => void }) =>
     <Row>
       <Col lg="1">
-        <FontAwesomeIcon style={{ cursor:"pointer" }} onClick={_ => props.onMinusClick()} icon={faMinusCircle} />
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={_ => props.onMinusClick()} >
+          <FontAwesomeIcon style={{ cursor:"pointer" }} icon={faMinusCircle} />
+        </motion.button>
       </Col>
       <Col lg="1">{props.amount}</Col>
       <Col lg="1">
-        <FontAwesomeIcon style={{ cursor:"pointer" }} onClick={_ => props.onPlusClick()} icon={faPlusCircle} />
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={_ => props.onPlusClick()} >
+          <FontAwesomeIcon style={{ cursor:"pointer" }} icon={faPlusCircle} />
+        </motion.button>
       </Col>
       <Col lg="6">{props.product.name}</Col>
       <Col lg="2">{props.product.price * props.amount}€</Col>
       <Col lg="1">
-        <FontAwesomeIcon style={{ cursor:"pointer" }} onClick={_ => props.onXClick()} icon={faTimes} />
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={_ => props.onXClick()}>
+          <FontAwesomeIcon style={{ cursor:"pointer" }} icon={faTimes} />
+        </motion.button>
       </Col>
     </Row>,
   shoppingCartIcon:(props:{ total:number, onClick:() => void}) =>
   <div 
-    style={ { position:"absolute", top:"5px", right:"5px", cursor:"pointer" }}
+    style={ { position:"absolute", top:"5px", right:"15px", cursor:"pointer" }}
     onClick={_ => props.onClick()}>
     <FontAwesomeIcon icon={faShoppingCart} size="2x"/>
     <div className="rounded text-center" 

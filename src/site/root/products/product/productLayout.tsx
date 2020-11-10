@@ -4,6 +4,7 @@ import { Form, Button, Card, Container, Row, Col, Spinner, Jumbotron, InputGroup
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons'
 import { ProductInfo } from '../productsState';
+import { motion } from 'framer-motion';
 
 export type ProductCardProps = { product:ProductInfo, addProduct:() => void } 
 
@@ -40,10 +41,13 @@ export const productLayout = ({
                 </div>
             </Col>
             <Col lg="2">
-              <Button variant="primary" onClick={_ => props.addProduct()}>
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={_ => props.addProduct()}>
                 <FontAwesomeIcon icon={faPlusCircle} />
                 <span>{` ${props.product.price}`}€</span>
-              </Button> 
+              </motion.button>
             </Col>
           </Row>
         </Card.Footer>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form, Button, Container, Row, Col, Spinner, Jumbotron, InputGroup } from "react-bootstrap";
 import { ValidationResult } from '../../../shared';
+import { motion } from "framer-motion";
 
 export const contactUsLayout = ({
   formItemInGroup: (props:{ 
@@ -39,6 +40,14 @@ export const contactUsLayout = ({
   spinner: (props:{}) =>
     <Spinner animation="border" role="status">
       <span className="sr-only">Submitting...</span>
-    </Spinner>
-
+    </Spinner>,
+  littleJump:(html:JSX.Element) =>
+    <motion.div animate={{
+      scale: [1, 0.95, 1]
+    }}
+    transition={{ duration: 0.3 }}
+    >
+      {html}
+    </motion.div>
+      
 })

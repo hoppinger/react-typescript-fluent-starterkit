@@ -4,7 +4,7 @@ import { Container, Row, Col } from "react-bootstrap";
 export const rootLayout = {
   page:(html:JSX.Element) => 
     <div style={{ minHeight:"1000px" }}>
-      <Container fluid>
+      <Container fluid className="p-3">
         <Row>
           <Col>
             {html}

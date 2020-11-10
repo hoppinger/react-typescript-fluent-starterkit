@@ -3,10 +3,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Link } from "react-router-dom"
 import { CurrentPage, StandardLocalWidget, Updater } from "../../widgets-extras";
-import { Pages, routeUpdaters } from "./routes/routesState";
+import { Pages, routeBuilders, routeUpdaters } from "./routes/routesState";
 import { ContactUsState } from "./contactUs/contactUsState";
 import { initialProductsState, ProductsState } from "./products/productsState";
 import { initialShoppingCartState, ShoppingCartState } from "./shoppingCart/shoppingCartState";
+import { AboutUsState, initialAboutUsState } from "./aboutUs/aboutUsState";
 
 export type ProductId = number
 
@@ -23,13 +24,15 @@ export type State = {
   page:CurrentPage<Pages>,
   shoppingCart:ShoppingCartState,
   productsState:ProductsState,
+  aboutUsState:AboutUsState,
   lastUpdate?:"shopping cart" | "products"
 }
 
 export const initialState:State = ({ 
-  page:{ kind:"home", params:{} }, 
+  page:routeBuilders.home.make({}), 
   shoppingCart:initialShoppingCartState,
-  productsState:initialProductsState
+  productsState:initialProductsState,
+  aboutUsState:initialAboutUsState
 })
 
 export const stateUpdaters = {
@@ -53,6 +56,12 @@ export const stateUpdaters = {
     ({...currentState,
       productsState:productsUpdater(currentState.productsState),
       lastUpdate:"products"
-    }),     
+    }),
+  updateAboutUsState:(aboutUsUpdater:Updater<AboutUsState>) => 
+  (currentState:State):State => 
+    ({...currentState,
+      aboutUsState:aboutUsUpdater(currentState.aboutUsState),
+      lastUpdate:undefined
+    }),
   routes:routeUpdaters
 }

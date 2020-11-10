@@ -5,14 +5,15 @@ import { ValidationResult } from '../../../shared';
 
 export const productsLayout = ({
   loading: (props:{}) =>
-  <Jumbotron fluid>
-    <Container>
-      <h1>Loading products</h1>
-      <Spinner animation="border" role="status">
-        <span className="sr-only">Loading...</span>
-      </Spinner>
-    </Container>
-  </Jumbotron>,
+    <Jumbotron fluid>
+      <Container>
+        <h1>Loading products</h1>
+        <Spinner animation="border" role="status">
+          <span className="sr-only">Loading...</span>
+        </Spinner>
+      </Container>
+    </Jumbotron>
+  ,
   withLoader:(html:JSX.Element) =>
     <>
       {html}
@@ -23,9 +24,10 @@ export const productsLayout = ({
       {html}
     </CardDeck>,
   productsCol:(html:JSX.Element) =>
-  <Col lg="8">
-    {html}
-    </Col>,
+    <Col lg="8">
+      {html}
+    </Col>
+  ,
   shoppingCartCol:(html:JSX.Element) =>
     <Col lg="4">
       {html}

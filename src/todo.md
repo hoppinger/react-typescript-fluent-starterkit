@@ -1,19 +1,26 @@
 # Doing
-[ ] implement animations from https://www.framer.com/motion/
 [ ] implement page transitions with React transition group
 [ ] about us page
-  [ ] make it pretty
+  [ ] what we stand for
+    [ ] happy picture
+    [ ] bit of text
+  [ ] our team
+    [ ] mock "team" API
+      [ ] actual pictures
+    [ ] "Meet the team" header
+    [x] spinner when loading
+[ ] home 
+  [ ] special offers with immediate "add to cart" button
+  [ ] inspiring pictures of smiling people
 [ ] responsiveness, especially of shopping cart
 [ ] unique keys
 [ ] shopping cart
   [ ] "payment" flow
-[ ] home with special offers
-[ ] restore home url to "/"
 [ ] integrate with _public site_
   [ ] login/registration from _public site_
-[ ] remote and deferred validation of contact-us form
 
-[ ] think of an epic name
+[ ] restore home url to "/"
+[ ] think of an epic name 
 [ ] fully type-safe routes (requires 4.1)
 
 
@@ -32,12 +39,15 @@
 
 
 # Make it production ready?
+[ ] scaffold with new scaffolder and new admin interface and replace placeholder API
 [ ] product page
   [ ] variants
   [ ] options
   [ ] locations/shops
     [ ] delivery vs pickup (for restaurant-type clients)
-[ ] scaffold with new scaffolder and new admin interface and replace placeholder API
+[ ] translations
+[ ] micro-copy
+[ ] multi-language
 [ ] options, option groups, and product categories
 [ ] multi-tenancy, roles and rights
 [ ] simulated payment provider
@@ -59,6 +69,7 @@
 
 
 # Done
+[x] implement animations from https://www.framer.com/motion/
 [x] use `componentDidCatch` around some page which is broken on purpose
 [x] Hoppinger e-commerce logo in header
 [x] ironic footer with hipster text
