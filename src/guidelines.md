@@ -381,7 +381,7 @@ We use two main tools for this\:
 Consider the renderer of a product card. The positioning of links, images, text, etc. Is quite articulated. Most of the code has very little to do with logic though. There is only a single button that adds the product to the cart, and we abstract this interaction away with a simple `addProduct:() => void` callback\:
 
 ```tsx
-export const productLayout = ({
+export const ProductLayout = ({
   card:(props:{ product:ProductInfo, addProduct:() => void }) =>
     <Card>
       <Card.Body>
@@ -434,7 +434,7 @@ The consumer of this functional component is a widget which is responsible for t
 export const productWidget = 
   (products:ShoppingProductsState) => (product:ProductInfo) : Widget<"add to cart"> => 
   fromJSX(setState =>
-    <productLayout.card key={product.productId} product={product} addProduct={() => setState("add to cart")} />
+    <ProductLayout.card key={product.productId} product={product} addProduct={() => setState("add to cart")} />
   )
 ```
 
@@ -444,7 +444,7 @@ Notice that, should the product widget end up doing more complex logic, then nei
 It could be that in some cases we want to add some markup *around* an existing widget, without impacting the code and logic of the widget of course. In this case, we define a wrapper such as this\:
 
 ```tsx
-export const rootLayout = {
+export const RootLayout = {
   page:(html:JSX.Element) => 
     <div style={{ minHeight:"1000px" }}>
       <Container fluid>
@@ -682,7 +682,7 @@ We define a memoized component that only rerenders when property `a` in the stat
 
 ```tsx
 type State = { a:number, b:number }
-const MemoizeA = React.memo((props: {state:State }) => 
+const MemoizeA = React.memo((props: { state:State }) => 
   <>
     <h2>Memoized on a</h2>
     <div>a: {props.state.a}</div>
@@ -696,7 +696,7 @@ An example from our sample application is a wrapper around the product card. Not
 
 ```tsx
 const MemoizedProductCard = React.memo((props: ProductCardProps) => 
-  <productLayout.card key={props.product.productId} product={props.product} addProduct={props.addProduct} />,
+  <ProductLayout.card key={props.product.productId} product={props.product} addProduct={props.addProduct} />,
   (prev, curr) => prev.product == curr.product)
 
 export const productWidget = 
@@ -757,7 +757,7 @@ export const timedCounterTo = (currentValue:number, maxValue:number, updateDelay
 ## General hygiene conventions
 We use `camelCase` for values and functions.
 
-We use `PascalCase` for types.
+We use `PascalCase` for types and components.
 
 We use `camelCase` for generic type parameters.
 
@@ -783,7 +783,7 @@ add more about typed Routes
 
 
 ## Giuseppe
-we should add a brief introduction to widgets
+  - we should add a brief introduction to widgets
   - types narrowing (selection) and widening (map back)
 
 ## Steven
