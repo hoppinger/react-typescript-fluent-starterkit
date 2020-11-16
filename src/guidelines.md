@@ -778,6 +778,10 @@ We use formatting guidelines as defined by each project team **in full consensus
 
 
 # Feedback to process
+## Francesco
+add more about typed Routes
+
+
 ## Giuseppe
 we should add a brief introduction to widgets
   - types narrowing (selection) and widening (map back)

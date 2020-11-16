@@ -11,15 +11,6 @@ import { AboutUsState, initialAboutUsState } from "./aboutUs/aboutUsState";
 
 export type ProductId = number
 
-export type Person = {
-  name:string,
-  surname:string
-}
-export const personUpdaters = {
-  name:(newName:string) => (currentPerson:Person):Person => ({ ...currentPerson, name:newName }),
-  surname:(newSurname:string) => (currentPerson:Person):Person => ({ ...currentPerson, surname:newSurname }),
-}
-
 export type State = {
   page:CurrentPage<Pages>,
   shoppingCart:ShoppingCartState,
