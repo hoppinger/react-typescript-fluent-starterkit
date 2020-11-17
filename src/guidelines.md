@@ -850,6 +850,65 @@ This way you introduce a minimal extra structure, but\:
 - if the requirements change in such a way as to require changing the way that the button behaves only in the context of the `Product` page, then you can easily change the code of `ProductLayout`, easily "detaching" from the shared utility.
 
 
+# About widgets
+Consider a button. A button does two things\:
+1) render the button to the DOM
+2) produce an infinite stream of click events that are captured via the `onClick` callback.
+
+> Why "infinite"? Because we never know how many we will get, ranging from zero (button is never clicked) to a million (the play button on a Spotify web player that is always left open).
+
+A `Widget<output>` does two things\:
+1) render the widget to the DOM
+2) produce an infinite stream of `output` events that are captured via the callback.
+
+> Widgets are not a Hoppinger\-specific invention. They are based on two very important design patterns that are strongly advised to discover before diving into the library\: observables, or (functional) reactive programming. 
+
+Sometimes a widget also takes an input. Just like a button takes as input a value to show inside the clickable area. In this case, we use use `IOWidget<input, output>` to denote the fact that our widget takes an input of type `input`. For example, a button could be seen as an instance of a widget that takes as input a string, and produces a stream of click events. 
+
+## Widgets from `JSX.Element`
+We can actually build such a widget from a button. We just need to wrap the React components we want inside a `fromJSX` call, and invoke its callback (in this case `onDone`) whenever we want to add something to the output stream\:
+
+```tsx
+const buttonAsWidget = (input:string) : Widget<React.MouseEvent<HTMLButtonElement, MouseEvent>> =>
+  fromJSX(onDone => 
+    <button onClick={e => onDone(e)}>{input}</button>
+  )
+```
+
+We are not limited to just a button, and we can put whatever we want inside `fromJSX`. For example, extra `div`s\:
+
+```tsx
+const buttonAsWidget = (input:string) : Widget<React.MouseEvent<HTMLButtonElement, MouseEvent>> =>
+  fromJSX(onDone => 
+    <div>
+      <button onClick={e => onDone(e)}>{input}</button>
+    </div>
+  )
+```
+
+## Building up (widening/retraction)
+Ultimately, the whole application must be encoded as a `Widget<State>`, where `State` is the global state of the application. This reflects the fact that an application produces a constant, infinite stream of new `State`s as a result of user interactions, promises, websockets, automatic timers, and more.
+
+The goal of widgets is to compose smaller widgets that update tiny bits of the state into bigger widgets that update larger and larger subsets of the state until we get to the root widget that updates the whole state.
+
+You can easily imagine that each small thing, such as each checkbox and input box, will ultimately produce data that gets merged into the global state. For example\:
+
+```
+checkbox -> WantsNewsletter -> Customer -> Company -> State
+```
+
+- signatures of the different widgets
+- map for embedding
+- any for multiple
+
+
+## Building down (narrowing/selection)
+
+
+## Updater pattern
+
+
+
 # Feedback to process
 ## Giuseppe
 - we should add a brief introduction to widgets
