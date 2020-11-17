@@ -827,6 +827,28 @@ export interface LoggedOutState {​
 Now it is clearer what the meaning of `status` is, and we can more easily define functions that manipulate the `status` by giving them a `LoggedOutStateStatus` parameter.
 
 
+### The infamous `shared` folder :)
+Projects will feature some common utilities. Perhaps a button that is used in many places, or a part of a form. One might tempted to never duplicate code, and this is in general a good principle to follow.
+
+It is common to place all of these utilities in a root folder called `shared`.
+
+Do not forget that early optimizations are dangerous. Sometimes duplicated code can be a source of bigger trouble than improvements. Suppose that the `shared` folder contains some generic buttons that are used everywhere in our project. At some point though, one of the components that use the shared buttons need them to behave/be styled slightly different. In this case, one might "just add" some parameters to the shared buttons to enable this deviating behavior. *This is risky and should not be done without thinking twice*\: before you know it you end up with a way too complex shared button that performs too many different things in the same code base.
+
+Always consider the possibility of duplicating small pieces of code that share common components. Do not make the components polymorphic (ie capable of doing multiple things), and rather split further into smaller sub\-components that can be used as they are. In general, a shared utility is as powerful as it is simple to use without thinking about all of its internal variants.
+
+Moreover, when doubting about the long\-term implications of using the same shared utility (for example because you know of wishes to change the visuals of a given feature in the future) do consider the possibility of having shallow pass\-throughs that only call a utility such as\:
+
+```tsx
+const ProductLayout = {
+  productPrimaryButton = (props:...) =>
+    <SharedLayout.PrimaryButton ... />
+}
+```
+
+This way you introduce a minimal extra structure, but\:
+- if the `SharedLayout.PrimaryButton` changes, all the dependees change in one go without overhead\;
+- if the requirements change in such a way as to require changing the way that the button behaves only in the context of the `Product` page, then you can easily change the code of `ProductLayout`, easily "detaching" from the shared utility.
+
 
 # Feedback to process
 ## Francesco
