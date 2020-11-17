@@ -755,17 +755,7 @@ export const timedCounterTo = (currentValue:number, maxValue:number, updateDelay
 
 
 ## General hygiene conventions
-We use `camelCase` for values and functions.
-
-We use `PascalCase` for types and components.
-
-We use `camelCase` for generic type parameters.
-
-We use long and expressive names for everything. Expressive names contain for example both target and action (`productsUpdaters` is the object with all the updaters for the products widget(s)).
-
-We prefer very short functions and one\-liners. Lambdas functions are preferred over long functions.
-
-We compile with the strictes TypeScript options possible.
+We compile with the strictest TypeScript options possible.
 
 We split out TypeScript projects in sub\-projects to speed compilation times up.
 
@@ -776,15 +766,82 @@ We absolutely do not use other DOM\-manipulation libraries that might conflict w
 We use formatting guidelines as defined by each project team **in full consensus**. Hoppinger\-broad formatting guidelines will later appear, but this process will take a bit longer.
 
 
+### Naming conventions
+We use `camelCase` for values and functions.
+
+We use `PascalCase` for types and components, given that React requires all custom components to start with a capital letter.
+
+We use `camelCase` for generic type parameters.
+
+We use long and expressive names, including function parameters and generic type parameters. Expressive names contain for example both target and action (`productsUpdaters` is the object with all the updaters for the products widget(s)). Long and expressive names are particularly mandated for top\-level ("global") things, because they will be used in many places throghout code. It is ok to give a one\-letter name to the parameter of a callback (`onClick={e => ...}`) because the impact is very local.
+
+We prefer very short functions and one\-liners. Lambdas functions are preferred over long functions.
+
+    
+#### Give names to long types
+When an implicit type is really large, this could be a problem when the need arises to manually annotate types. This problem is compound by the use of algebraic types with compositions of `&` and `|`.
+
+While some of these issues can be mitigated by `typeof`, it is better to give explicit, expressive names to these complex computed types. For instance, consider the following code\:
+
+```ts
+export interface LoggedOutState {​
+  readonly status: "logged out"
+                 | "logged out - logging in"
+                 | "logged out - login api error"
+                 | "logged out - login not authorized"
+                 | "logged out - account already active"
+                 | "logged out - error account not active"
+                 | "logged out - error too many reset password attempts"
+                 | "logged out - error reset password token has expired"
+                 | "logged out - error reset password token not found"
+                 | "logged out - error too many account activation attempts"
+                 | "logged out - error account activation token not found"
+                 | "logged out - too many attempts",
+  readonly login_data:LoginData
+```    
+
+If we need to pass a parameter of type `status`, we could of course use `LoggedOutState["status"]`, but this carries little to no intent information. It is advised to make the meaning of the type of `status` more explicit by renaming it as follows\:
+
+  
+```ts
+export type LoggedOutStateStatus =
+"logged out"
+| "logged out - logging in"
+| "logged out - login api error"
+| "logged out - login not authorized"
+| "logged out - account already active"
+| "logged out - error account not active"
+| "logged out - error too many reset password attempts"
+| "logged out - error reset password token has expired"
+| "logged out - error reset password token not found"
+| "logged out - error too many account activation attempts"
+| "logged out - error account activation token not found"
+| "logged out - too many attempts"
+
+export interface LoggedOutState {​
+  readonly status: LoggedOutStateStatus
+  readonly login_data: LoginData
+}​
+```    
+
+Now it is clearer what the meaning of `status` is, and we can more easily define functions that manipulate the `status` by giving them a `LoggedOutStateStatus` parameter.
+
+
 
 # Feedback to process
 ## Francesco
-add more about typed Routes
+- add more about typed Routes
+
+
+
+## Naomi and Tim
+- components and layouts should be capitalized
+  - also explain why
 
 
 ## Giuseppe
-  - we should add a brief introduction to widgets
-  - types narrowing (selection) and widening (map back)
+- we should add a brief introduction to widgets
+- types narrowing (selection) and widening (map back)
 
 ## Steven
 - use this as the startup tutorial in the widget library
