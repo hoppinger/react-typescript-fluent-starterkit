@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import { Routes as RouteWidgets, StandardLocalWidget, Updater } from "../../../widgets-extras";
 import { State, stateUpdaters } from "../rootState";
 import { Pages, routeUpdaters } from "./routesState";
-import { navigationLayout as navigationLayout } from "./routesLayout";
+import { NavigationLayout as NavigationLayout } from "./routesLayout";
 import { Nav, Navbar } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons'

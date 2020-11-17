@@ -7,12 +7,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle, faMinusCircle, faTimes, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import { motion } from 'framer-motion';
 
-export const shoppingCartLayout = ({
-  sticky:(html:JSX.Element) => 
+export const ShoppingCartLayout = ({
+  Sticky:(html:JSX.Element) => 
     <div className="sticky-top" style={{ overflowY:"visible"} }>{html}</div>,
-  yourCart:(props:{}) =>
+  YourCart:(props:{}) =>
     <h4 className="m-4">Your order:</h4>,  
-  product:(props:{ 
+  Product:(props:{ 
       product:ProductInfo, amount:number, 
       onMinusClick:() => void, onPlusClick:() => void, 
       onXClick:() => void }) =>
@@ -45,7 +45,7 @@ export const shoppingCartLayout = ({
         </motion.button>
       </Col>
     </Row>,
-  shoppingCartIcon:(props:{ total:number, onClick:() => void}) =>
+  ShoppingCartIcon:(props:{ total:number, onClick:() => void}) =>
   <div 
     style={ { position:"absolute", top:"5px", right:"15px", cursor:"pointer" }}
     onClick={_ => props.onClick()}>

@@ -3,8 +3,8 @@ import { Form, Button, Container, Row, Col, Spinner, Jumbotron, InputGroup } fro
 import { ValidationResult } from '../../../shared';
 import { motion } from "framer-motion";
 
-export const contactUsLayout = ({
-  formItemInGroup: (props:{ 
+export const ContactUsLayout = ({
+  FormItemInGroup: (props:{ 
     name:string, 
     controlId:string, 
     type:string,
@@ -28,7 +28,7 @@ export const contactUsLayout = ({
           </Form.Control.Feedback>
         : <Form.Control.Feedback type="valid" /> }
     </Form.Group>,
-  thankYou: (props:{}) =>
+  ThankYou: (props:{}) =>
     <Jumbotron fluid>
       <Container>
         <h1>Thank you for your feedback</h1>
@@ -37,11 +37,11 @@ export const contactUsLayout = ({
         </p>
       </Container>
     </Jumbotron>,
-  spinner: (props:{}) =>
+  Spinner: (props:{}) =>
     <Spinner animation="border" role="status">
       <span className="sr-only">Submitting...</span>
     </Spinner>,
-  littleJump:(html:JSX.Element) =>
+  LittleJumpAnimation:(html:JSX.Element) =>
     <motion.div animate={{
       scale: [1, 0.95, 1]
     }}

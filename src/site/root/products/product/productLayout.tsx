@@ -8,8 +8,8 @@ import { motion } from 'framer-motion';
 
 export type ProductCardProps = { product:ProductInfo, addProduct:() => void } 
 
-export const productLayout = ({
-  card:(props:ProductCardProps) =>
+export const ProductLayout = ({
+  Card:(props:ProductCardProps) =>
     <Card>
       <Card.Body>
         <Row>

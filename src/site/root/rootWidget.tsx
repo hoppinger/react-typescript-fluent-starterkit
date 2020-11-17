@@ -1,15 +1,15 @@
 import { inl, any, browserRouter, fromJSX, IOWidget, link, notFoundRouteCase, route, routerSwitch, stateful, Unit, Widget, onlyIf, wait } from "widgets-for-react"
 import React from 'react';
 import { applyDoubleUpdater, componentDidCatch, StandardLocalWidget, Updater } from "../../widgets-extras";
-import { initialState, Person, personUpdaters, ProductId, State, stateUpdaters } from "./rootState";
+import { initialState, ProductId, State, stateUpdaters } from "./rootState";
 import { routes } from "./routes/routesWidget";
 import { contactUsWidget } from "./contactUs/contactUsWidget";
-import { rootLayout } from "./rootLayout";
+import { RootLayout } from "./rootLayout";
 import { productsWidget } from "./products/productsWidget";
 import { footer, navigation } from "./headerAndFooter/headerAndFooterWidget";
 import { motion } from "framer-motion"
 import { Card, Container, Jumbotron, Spinner } from "react-bootstrap";
-import { homeLayout } from "./home/homeLayout";
+import { HomeLayout } from "./home/homeLayout";
 import { aboutUsWidget } from "./aboutUs/aboutUsWidget";
 
 export const page:IOWidget<State, Updater<State>> = currentState =>
@@ -32,7 +32,7 @@ export const page:IOWidget<State, Updater<State>> = currentState =>
       )
     : currentState.page.kind == "home" ?
       fromJSX(_ => 
-        <homeLayout.welcome title={"Shoppinger, the online shop where dreams come true!"} />
+        <HomeLayout.Welcome title={"Shoppinger, the online shop where dreams come true!"} />
       )
     : currentState.page.kind == "aboutUs" ?
       aboutUsWidget(currentState.aboutUsState).map(stateUpdaters.updateAboutUsState)
@@ -42,7 +42,7 @@ export const page:IOWidget<State, Updater<State>> = currentState =>
     ),
     (error => 
       fromJSX(_ =>
-        <rootLayout.error error={error} />
+        <RootLayout.Error error={error} />
       )
     )
   )
@@ -55,7 +55,7 @@ export const root =
       any<Updater<State>>()([
         routes(),
         navigation(currentState),
-        page(currentState).wrapHTML(rootLayout.page),
+        page(currentState).wrapHTML(RootLayout.Page),
         footer(currentState)
       ]).map(u => u(currentState))
     )(initialState)

@@ -6,15 +6,15 @@ import { Form, Button, InputGroup, CardDeck, Row, Col, Card } from "react-bootst
 import { validations } from "../../../shared";
 import { AnimatePresence, AnimateSharedLayout, motion } from "framer-motion";
 import { Range } from "immutable";
-import { aboutUsLayout } from "./aboutUsLayout";
+import { AboutUsLayout } from "./aboutUsLayout";
 
 export const aboutUsWidget : StandardLocalWidget<AboutUsState> = currentState => 
   any<Updater<AboutUsState>>()([
     async<Array<TeamMember>>()(currentState.teamMembers).map(aboutUsUpdaters.teamMembers),
     fromJSX((setState:(_:Updater<AboutUsState>) => void) =>
       currentState.teamMembers.kind == "loaded" ?
-        <aboutUsLayout.teamMembersCards teamMembers={currentState.teamMembers.value} />
+        <AboutUsLayout.TeamMembersCards teamMembers={currentState.teamMembers.value} />
       :
-        <aboutUsLayout.loading />
+        <AboutUsLayout.Loading />
     )
   ])

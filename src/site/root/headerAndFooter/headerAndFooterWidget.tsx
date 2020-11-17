@@ -7,12 +7,12 @@ import { Nav, Navbar } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faShoppingCart, faHeart, faCoffee, faCopyright } from '@fortawesome/free-solid-svg-icons'
 import { routeUpdaters } from "../routes/routesState";
-import { headerAndFooterLayout } from "./headerAndFooterLayout";
-import { shoppingCartLayout } from "../shoppingCart/shoppingCartLayout";
+import { HeaderAndFooterLayout } from "./headerAndFooterLayout";
+import { ShoppingCartLayout } from "../shoppingCart/shoppingCartLayout";
 
 export const navigationItemLink = function<routeName extends keyof (typeof routeUpdaters)>(title:string, routeName:routeName) : StandardLocalWidget<State> { return state =>
   fromJSX(_ =>
-    <headerAndFooterLayout.itemLink
+    <HeaderAndFooterLayout.ItemLink
       isActive={state.page.kind == routeName}
       title={title}
       to={routeUpdaters[routeName].url}
@@ -22,7 +22,7 @@ export const navigationItemLink = function<routeName extends keyof (typeof route
 export const navigation:StandardLocalWidget<State> = (state:State) =>
     any<Updater<State>>()([
       fromJSX(setState => 
-        <headerAndFooterLayout.logo 
+        <HeaderAndFooterLayout.Logo 
           onClick={() => setState(routeUpdaters.home.jumpTo({}))} />
         ),
       navigationItemLink("Home", "home")(state),
@@ -31,14 +31,14 @@ export const navigation:StandardLocalWidget<State> = (state:State) =>
       navigationItemLink("Contact us", "contactUs")(state),
       navigationItemLink("Error handling test", "errorHandlingTest")(state),
       fromJSX(setState => 
-        <shoppingCartLayout.shoppingCartIcon 
+        <ShoppingCartLayout.ShoppingCartIcon 
           total={state.shoppingCart.products.reduce((total,amount,productId) => total + amount, 0)}
           onClick={() => setState(routeUpdaters.products.jumpTo({}))}
         />
       )
-    ]).wrapHTML(headerAndFooterLayout.nav)
+    ]).wrapHTML(HeaderAndFooterLayout.Nav)
 
 export const footer:StandardLocalWidget<State> = (state:State) =>
   fromJSX(setState => 
-    <headerAndFooterLayout.footer />
+    <HeaderAndFooterLayout.Footer />
   )

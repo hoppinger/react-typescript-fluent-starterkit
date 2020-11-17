@@ -5,22 +5,22 @@ import { Button, Container, Nav, Navbar } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faShoppingCart, faHeart, faCoffee, faCopyright } from '@fortawesome/free-solid-svg-icons'
 
-export const headerAndFooterLayout = {
-  item:(props:{ title:string, href:string }) =>
+export const HeaderAndFooterLayout = {
+  Item:(props:{ title:string, href:string }) =>
     <Nav.Item>
       <Nav.Link href={props.href}>
         {props.title}
       </Nav.Link>
     </Nav.Item>,
-  itemLink:(props:{ title:string, to:string, isActive:boolean }) =>
+  ItemLink:(props:{ title:string, to:string, isActive:boolean }) =>
     <Nav.Item>
       <Nav.Link active={props.isActive}>
         <Link to={props.to}>{props.title}</Link>
       </Nav.Link>
     </Nav.Item>,
-  nav:(innerHtml:JSX.Element) =>
+  Nav:(innerHtml:JSX.Element) =>
     <Nav variant="tabs" className="mr-auto">{innerHtml}</Nav>,
-  footer:() =>
+  Footer:() =>
     <footer>
       <Navbar bg="dark" variant="dark" sticky="bottom" style={{ height:"100px" }}>
         <Nav>
@@ -38,7 +38,7 @@ export const headerAndFooterLayout = {
         </Nav>
       </Navbar>    
     </footer>,
-  logo:(props:{ onClick:() => void }) =>
+  Logo:(props:{ onClick:() => void }) =>
     <img 
       onClick={_ => props.onClick()}
       style={{ cursor:"pointer" }}

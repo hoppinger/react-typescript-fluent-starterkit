@@ -5,8 +5,8 @@ import { motion } from "framer-motion";
 import { TeamMember } from './aboutUsState';
 import { Range } from 'immutable';
 
-export const aboutUsLayout = ({
-  loading: (props:{}) =>
+export const AboutUsLayout = ({
+  Loading: (props:{}) =>
     <Jumbotron fluid>
       <Container>
         <h1>Loading team members</h1>
@@ -16,7 +16,7 @@ export const aboutUsLayout = ({
       </Container>
     </Jumbotron>
   ,
-  teamMemberCard:(props:{ teamMember:TeamMember }) =>
+  TeamMemberCard:(props:{ teamMember:TeamMember }) =>
     <Card>
       <Card.Body>
         <motion.div 
@@ -34,7 +34,7 @@ export const aboutUsLayout = ({
       </Card.Footer>
     </Card>
   ,
-  teamMembersCards:(props:{ teamMembers:Array<TeamMember> }) =>
+  TeamMembersCards:(props:{ teamMembers:Array<TeamMember> }) =>
     <Row>
       <Col>
         {
@@ -42,9 +42,9 @@ export const aboutUsLayout = ({
             .flatMap(i =>
               [
                 <CardDeck className="p-3">
-                  <aboutUsLayout.teamMemberCard teamMember={props.teamMembers[i * 3 + 0]} />
-                  <aboutUsLayout.teamMemberCard teamMember={props.teamMembers[i * 3 + 1]} />
-                  <aboutUsLayout.teamMemberCard teamMember={props.teamMembers[i * 3 + 2]} />
+                  <AboutUsLayout.TeamMemberCard teamMember={props.teamMembers[i * 3 + 0]} />
+                  <AboutUsLayout.TeamMemberCard teamMember={props.teamMembers[i * 3 + 1]} />
+                  <AboutUsLayout.TeamMemberCard teamMember={props.teamMembers[i * 3 + 2]} />
                 </CardDeck>
               ]
           ).toArray()

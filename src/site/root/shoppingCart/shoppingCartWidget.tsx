@@ -4,20 +4,20 @@ import { Button } from "react-bootstrap";
 import { ShoppingCartState, shoppingCartUpdaters } from "./shoppingCartState";
 import { ShoppingProductsState } from "../products/productsState";
 import { tryCatch, Updater } from "../../../widgets-extras";
-import { shoppingCartLayout } from "./shoppingCartLayout";
+import { ShoppingCartLayout } from "./shoppingCartLayout";
 
 export const shoppingCartWidget = 
   (shoppingCart:ShoppingCartState, productsState:ShoppingProductsState) : Widget<Updater<ShoppingCartState>> =>  
   fromJSX<Updater<ShoppingCartState>, never>(setState =>
   <>
-    <shoppingCartLayout.yourCart />
+    <ShoppingCartLayout.YourCart />
     {
       shoppingCart.products
         .map((amount, productId) => {
           let product = productsState.products.get(productId)
           if (product == undefined) return <></>
           else return <>
-            <shoppingCartLayout.product 
+            <ShoppingCartLayout.Product 
               product={product} 
               amount={amount}
               onMinusClick={() => 
@@ -38,4 +38,4 @@ export const shoppingCartWidget =
         .valueSeq()
         .toArray()
     }
-  </>).wrapHTML(shoppingCartLayout.sticky)
+  </>).wrapHTML(ShoppingCartLayout.Sticky)

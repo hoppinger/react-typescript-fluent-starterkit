@@ -12,6 +12,13 @@
 [ ] home 
   [ ] special offers with immediate "add to cart" button
   [ ] inspiring pictures of smiling people
+[ ] login/my orders
+  [ ] tracker
+    [ ] frequency depends on product
+      [ ] polling (slow)
+      [ ] real\-time with websocket
+  [ ] get in touch about a product
+  [ ] rating and review system
 [ ] responsiveness, especially of shopping cart
 [ ] unique keys
 [ ] shopping cart

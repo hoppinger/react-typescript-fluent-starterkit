@@ -6,8 +6,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faShoppingCart, faHeart, faCoffee, faCopyright } from '@fortawesome/free-solid-svg-icons'
 import { motion } from 'framer-motion';
 
-export const homeLayout = {
-  welcome:(props:{ title:string }) =>
+export const HomeLayout = {
+  Welcome:(props:{ title:string }) =>
     <motion.div animate={{
         scale: [1, 0.95, 1]
       }}

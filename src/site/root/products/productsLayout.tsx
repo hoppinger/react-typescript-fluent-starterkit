@@ -3,8 +3,8 @@ import { Range } from "immutable"
 import { Pagination, Form, Button, Container, Row, Col, Spinner, Jumbotron, InputGroup, CardDeck, CardColumns } from "react-bootstrap";
 import { ValidationResult } from '../../../shared';
 
-export const productsLayout = ({
-  loading: (props:{}) =>
+export const ProductsLayout = ({
+  Loading: (props:{}) =>
     <Jumbotron fluid>
       <Container>
         <h1>Loading products</h1>
@@ -14,29 +14,29 @@ export const productsLayout = ({
       </Container>
     </Jumbotron>
   ,
-  withLoader:(html:JSX.Element) =>
+  WithLoader:(html:JSX.Element) =>
     <>
       {html}
-      <productsLayout.loading />
+      <ProductsLayout.Loading />
     </>,
   cardDeck:(html:JSX.Element) =>
     <CardDeck className="mt-3">
       {html}
     </CardDeck>,
-  productsCol:(html:JSX.Element) =>
+  ProductsCol:(html:JSX.Element) =>
     <Col lg="8">
       {html}
     </Col>
   ,
-  shoppingCartCol:(html:JSX.Element) =>
+  ShoppingCartCol:(html:JSX.Element) =>
     <Col lg="4">
       {html}
     </Col>,
-  row:(html:JSX.Element) =>
+  Row:(html:JSX.Element) =>
     <Row>
       {html}
     </Row>,
-  paginator:(props:{ 
+  Paginator:(props:{ 
       jumpToFirst:() => void, 
       jumpToPrev:() => void, 
       jumpToNext:() => void, 

@@ -54,6 +54,36 @@ export type UrlToParams<url> = UnboxRes<UrlToParamsTmp<url, {}>>
 export type Url<page> = page extends { url:infer url } ? url : { error:"no url", page:page }
 export type PageParams<page> = UrlToParams<Url<page>>
 
+/* Given the pages object with all different pages in the format of a record such as
+pages = { home:{ url:[...], pageState:... }, aboutUs:{ url:[...], pageState:... }, ... }
+
+CurrentPage<pages> returns a discriminated union where the kind is the name of the page,
+and the url is converted into the appropriate parameters without further intervention.
+
+This utility will, for example, turn the following type
+
+{
+  home:{ url:[] },
+  products:{ url:["products"], pageState:ProductsPageState },
+  product:{ url:["product", { productId : number }] }
+}
+
+into:
+
+{
+  kind: "home";
+  params: {};
+} | {
+  kind: "products"
+  params: {},
+  pageState:ProductsPageState
+} | {
+  kind: "product";
+  params: {
+    productId : number
+  }
+}
+*/
 export type CurrentPage<pages> = { 
   [pageKey in keyof pages]:
     Pick<pages[pageKey], Exclude<keyof pages[pageKey], "url">>
@@ -66,6 +96,10 @@ export type CurrentPage<pages> = {
 export type RouteBuilder<state, pages, pageKey extends keyof pages> = 
   Fun<PageParams<pages[pageKey]>, CurrentPage<{ [k in pageKey]:pages[k] }>>
 
+/*
+Based on a pages object, we can define more required things that we would otherwise need 
+to build manually. For example, each page must be initializable from the url paramaters\:
+*/
 export type RouteBuilders<state, pages> =
   {
     [pageKey in keyof pages]:{
@@ -75,7 +109,7 @@ export type RouteBuilders<state, pages> =
 
 export type RouteUpdater<state, page> = 
   Fun<PageParams<page>, Updater<state>>
-  
+
 export type RouteUpdaters<state, pages> =
   {
     [pageKey in keyof pages]:{
@@ -84,6 +118,10 @@ export type RouteUpdaters<state, pages> =
     }
   }
 
+/*
+Based on a pages object, we can define more required things that we would otherwise need 
+to build manually. For example, each page must have a corresponding `Route`\:
+*/
 export type Routes<state, pages> = 
 {
   [pageKey in keyof pages]:Route<Updater<state>>
